@@ -20,6 +20,8 @@ Route::get('assunto/disciplina', 'DisciplinaController@disciplinas')->name('assu
 
 
 
+
+
 Route::get('assunto/{id}/perguntas', 'AssuntoController@perguntas')->name('assunto.perguntas');
 Route::post('assunto/getDatatable', 'AssuntoController@getDatatable')->name('assunto.getDatatable');
 Route::resource('assunto', 'AssuntoController')->except(['create', 'edit']);
