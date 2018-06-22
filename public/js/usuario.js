@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 6);
+/******/ 	return __webpack_require__(__webpack_require__.s = 7);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -575,7 +575,7 @@ module.exports = function normalizeComponent (
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-49127c6f\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/usuario/EditUsuario.vue":
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-0f721d08\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/usuario/EditUsuario.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -833,13 +833,202 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-49127c6f", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-0f721d08", module.exports)
   }
 }
 
 /***/ }),
 
-/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-6185b64e\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/usuario/FormularioCadastroUsuario.vue":
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-17e4fea9\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/usuario/ShowUsuario.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("section", { staticClass: "content-header" }, [
+      _c("h1", [
+        _c("span", { attrs: { id: "div-titulo-pagina" } }, [
+          _vm._v(_vm._s(_vm.model.name))
+        ])
+      ])
+    ]),
+    _vm._v(" "),
+    _c("section", { staticClass: "content" }, [
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-xs-12" }, [
+          _c("div", { staticClass: "box box-success" }, [
+            _c("div", { staticClass: "box-body" }, [
+              _c("section", { staticClass: "row text-center dados" }, [
+                _c("div", { staticClass: "col-12 col-sm-12 dado" }, [
+                  _c("h4", { staticStyle: { "text-align": "left" } }, [
+                    _vm._v("Email: " + _vm._s(_vm.model.email) + " ")
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-12 col-sm-6 dado" }, [
+                  _c("h4", { staticStyle: { "text-align": "left" } }, [
+                    _vm._v(
+                      " Data de Criação: " + _vm._s(_vm.model.created_at) + " "
+                    )
+                  ])
+                ]),
+                _vm._v(" "),
+                _c("div", { staticClass: "col-12 col-sm-6 dado" }, [
+                  _c("h4", { staticStyle: { "text-align": "left" } }, [
+                    _vm._v(
+                      " Data da ultima alteração: " +
+                        _vm._s(_vm.model.updated_at) +
+                        " "
+                    )
+                  ])
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c(
+              "div",
+              { staticClass: "box-footer align-right" },
+              [
+                _c("router-link", { attrs: { to: "/", exact: "" } }, [
+                  _c("a", { staticClass: "btn btn-default" }, [
+                    _c("i", { staticClass: "fa fa-reply" }),
+                    _vm._v(" "),
+                    _c("span", [_vm._v("  Voltar ")])
+                  ])
+                ])
+              ],
+              1
+            )
+          ])
+        ])
+      ])
+    ])
+  ])
+}
+var staticRenderFns = []
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-17e4fea9", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-25e97118\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/usuario/IndexUsuario.vue":
+/***/ (function(module, exports, __webpack_require__) {
+
+var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c("div", [
+    _c("section", { staticClass: "content-header" }, [
+      _c("h1", [
+        _c("span", { attrs: { id: "div-titulo-pagina" } }, [
+          _vm._v("Listagem dos Usuarios ")
+        ]),
+        _vm._v(" "),
+        _c(
+          "small",
+          { staticStyle: { float: "right" } },
+          [
+            _c("router-link", { attrs: { to: "/create", exact: "" } }, [
+              _c("a", { staticClass: "btn btn-success btn-sm" }, [
+                _c("i", { staticClass: "fa fa-plus" }),
+                _vm._v(" Cadastrar Usuario ")
+              ])
+            ])
+          ],
+          1
+        )
+      ])
+    ]),
+    _vm._v(" "),
+    _vm._m(0)
+  ])
+}
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("section", { staticClass: "content" }, [
+      _c("div", { staticClass: "row" }, [
+        _c("div", { staticClass: "col-xs-12" }, [
+          _c(
+            "div",
+            { staticClass: "box box-success", attrs: { id: "div-box" } },
+            [
+              _c(
+                "div",
+                {
+                  staticClass: "box-body",
+                  staticStyle: { "padding-top": "5px", "padding-bottom": "3px" }
+                },
+                [
+                  _c(
+                    "table",
+                    {
+                      staticClass:
+                        "table table-bordered table-striped table-hover",
+                      attrs: { id: "datatable" }
+                    },
+                    [
+                      _c("thead", [
+                        _c("tr", [
+                          _c(
+                            "th",
+                            {
+                              staticStyle: { "max-width": "40px" },
+                              attrs: { pesquisavel: "" }
+                            },
+                            [_vm._v("ID")]
+                          ),
+                          _vm._v(" "),
+                          _c("th", { attrs: { pesquisavel: "" } }, [
+                            _vm._v("Nome")
+                          ]),
+                          _vm._v(" "),
+                          _c("th", [_vm._v("Email")]),
+                          _vm._v(" "),
+                          _c(
+                            "th",
+                            {
+                              staticClass: "align-center",
+                              staticStyle: { width: "140px" }
+                            },
+                            [_vm._v("Ações")]
+                          )
+                        ])
+                      ])
+                    ]
+                  )
+                ]
+              )
+            ]
+          )
+        ])
+      ])
+    ])
+  }
+]
+render._withStripped = true
+module.exports = { render: render, staticRenderFns: staticRenderFns }
+if (false) {
+  module.hot.accept()
+  if (module.hot.data) {
+    require("vue-hot-reload-api")      .rerender("data-v-25e97118", module.exports)
+  }
+}
+
+/***/ }),
+
+/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-3d6dd09b\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/usuario/FormularioCadastroUsuario.vue":
 /***/ (function(module, exports, __webpack_require__) {
 
 var render = function() {
@@ -1097,196 +1286,7 @@ module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-6185b64e", module.exports)
-  }
-}
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-68b0899c\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/usuario/ShowUsuario.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("section", { staticClass: "content-header" }, [
-      _c("h1", [
-        _c("span", { attrs: { id: "div-titulo-pagina" } }, [
-          _vm._v(_vm._s(_vm.model.name))
-        ])
-      ])
-    ]),
-    _vm._v(" "),
-    _c("section", { staticClass: "content" }, [
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-xs-12" }, [
-          _c("div", { staticClass: "box box-success" }, [
-            _c("div", { staticClass: "box-body" }, [
-              _c("section", { staticClass: "row text-center dados" }, [
-                _c("div", { staticClass: "col-12 col-sm-12 dado" }, [
-                  _c("h4", { staticStyle: { "text-align": "left" } }, [
-                    _vm._v("Email: " + _vm._s(_vm.model.email) + " ")
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "col-12 col-sm-6 dado" }, [
-                  _c("h4", { staticStyle: { "text-align": "left" } }, [
-                    _vm._v(
-                      " Data de Criação: " + _vm._s(_vm.model.created_at) + " "
-                    )
-                  ])
-                ]),
-                _vm._v(" "),
-                _c("div", { staticClass: "col-12 col-sm-6 dado" }, [
-                  _c("h4", { staticStyle: { "text-align": "left" } }, [
-                    _vm._v(
-                      " Data da ultima alteração: " +
-                        _vm._s(_vm.model.updated_at) +
-                        " "
-                    )
-                  ])
-                ])
-              ])
-            ]),
-            _vm._v(" "),
-            _c(
-              "div",
-              { staticClass: "box-footer align-right" },
-              [
-                _c("router-link", { attrs: { to: "/", exact: "" } }, [
-                  _c("a", { staticClass: "btn btn-default" }, [
-                    _c("i", { staticClass: "fa fa-reply" }),
-                    _vm._v(" "),
-                    _c("span", [_vm._v("  Voltar ")])
-                  ])
-                ])
-              ],
-              1
-            )
-          ])
-        ])
-      ])
-    ])
-  ])
-}
-var staticRenderFns = []
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-68b0899c", module.exports)
-  }
-}
-
-/***/ }),
-
-/***/ "./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-949dca3e\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/usuario/IndexUsuario.vue":
-/***/ (function(module, exports, __webpack_require__) {
-
-var render = function() {
-  var _vm = this
-  var _h = _vm.$createElement
-  var _c = _vm._self._c || _h
-  return _c("div", [
-    _c("section", { staticClass: "content-header" }, [
-      _c("h1", [
-        _c("span", { attrs: { id: "div-titulo-pagina" } }, [
-          _vm._v("Listagem dos Usuarios ")
-        ]),
-        _vm._v(" "),
-        _c(
-          "small",
-          { staticStyle: { float: "right" } },
-          [
-            _c("router-link", { attrs: { to: "/create", exact: "" } }, [
-              _c("a", { staticClass: "btn btn-success btn-sm" }, [
-                _c("i", { staticClass: "fa fa-plus" }),
-                _vm._v(" Cadastrar Usuario ")
-              ])
-            ])
-          ],
-          1
-        )
-      ])
-    ]),
-    _vm._v(" "),
-    _vm._m(0)
-  ])
-}
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("section", { staticClass: "content" }, [
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-xs-12" }, [
-          _c(
-            "div",
-            { staticClass: "box box-success", attrs: { id: "div-box" } },
-            [
-              _c(
-                "div",
-                {
-                  staticClass: "box-body",
-                  staticStyle: { "padding-top": "5px", "padding-bottom": "3px" }
-                },
-                [
-                  _c(
-                    "table",
-                    {
-                      staticClass:
-                        "table table-bordered table-striped table-hover",
-                      attrs: { id: "datatable" }
-                    },
-                    [
-                      _c("thead", [
-                        _c("tr", [
-                          _c(
-                            "th",
-                            {
-                              staticStyle: { "max-width": "40px" },
-                              attrs: { pesquisavel: "" }
-                            },
-                            [_vm._v("ID")]
-                          ),
-                          _vm._v(" "),
-                          _c("th", { attrs: { pesquisavel: "" } }, [
-                            _vm._v("Nome")
-                          ]),
-                          _vm._v(" "),
-                          _c("th", [_vm._v("Email")]),
-                          _vm._v(" "),
-                          _c(
-                            "th",
-                            {
-                              staticClass: "align-center",
-                              staticStyle: { width: "140px" }
-                            },
-                            [_vm._v("Ações")]
-                          )
-                        ])
-                      ])
-                    ]
-                  )
-                ]
-              )
-            ]
-          )
-        ])
-      ])
-    ])
-  }
-]
-render._withStripped = true
-module.exports = { render: render, staticRenderFns: staticRenderFns }
-if (false) {
-  module.hot.accept()
-  if (module.hot.data) {
-    require("vue-hot-reload-api")      .rerender("data-v-949dca3e", module.exports)
+    require("vue-hot-reload-api")      .rerender("data-v-3d6dd09b", module.exports)
   }
 }
 
@@ -3931,7 +3931,7 @@ var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/comp
 /* script */
 var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/usuario/EditUsuario.vue")
 /* template */
-var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-49127c6f\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/usuario/EditUsuario.vue")
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-0f721d08\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/usuario/EditUsuario.vue")
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -3948,7 +3948,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources\\assets\\js\\components\\usuario\\EditUsuario.vue"
+Component.options.__file = "resources/assets/js/components/usuario/EditUsuario.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -3957,9 +3957,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-49127c6f", Component.options)
+    hotAPI.createRecord("data-v-0f721d08", Component.options)
   } else {
-    hotAPI.reload("data-v-49127c6f", Component.options)
+    hotAPI.reload("data-v-0f721d08", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -3979,7 +3979,7 @@ var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/comp
 /* script */
 var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/usuario/FormularioCadastroUsuario.vue")
 /* template */
-var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-6185b64e\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/usuario/FormularioCadastroUsuario.vue")
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-3d6dd09b\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/usuario/FormularioCadastroUsuario.vue")
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -3996,7 +3996,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources\\assets\\js\\components\\usuario\\FormularioCadastroUsuario.vue"
+Component.options.__file = "resources/assets/js/components/usuario/FormularioCadastroUsuario.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -4005,9 +4005,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-6185b64e", Component.options)
+    hotAPI.createRecord("data-v-3d6dd09b", Component.options)
   } else {
-    hotAPI.reload("data-v-6185b64e", Component.options)
+    hotAPI.reload("data-v-3d6dd09b", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -4027,7 +4027,7 @@ var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/comp
 /* script */
 var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/usuario/IndexUsuario.vue")
 /* template */
-var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-949dca3e\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/usuario/IndexUsuario.vue")
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-25e97118\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/usuario/IndexUsuario.vue")
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -4044,7 +4044,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources\\assets\\js\\components\\usuario\\IndexUsuario.vue"
+Component.options.__file = "resources/assets/js/components/usuario/IndexUsuario.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -4053,9 +4053,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-949dca3e", Component.options)
+    hotAPI.createRecord("data-v-25e97118", Component.options)
   } else {
-    hotAPI.reload("data-v-949dca3e", Component.options)
+    hotAPI.reload("data-v-25e97118", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -4075,7 +4075,7 @@ var normalizeComponent = __webpack_require__("./node_modules/vue-loader/lib/comp
 /* script */
 var __vue_script__ = __webpack_require__("./node_modules/babel-loader/lib/index.js?{\"cacheDirectory\":true,\"presets\":[[\"env\",{\"modules\":false,\"targets\":{\"browsers\":[\"> 2%\"],\"uglify\":true}}]],\"plugins\":[\"transform-object-rest-spread\",[\"transform-runtime\",{\"polyfill\":false,\"helpers\":false}]]}!./node_modules/vue-loader/lib/selector.js?type=script&index=0!./resources/assets/js/components/usuario/ShowUsuario.vue")
 /* template */
-var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-68b0899c\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/usuario/ShowUsuario.vue")
+var __vue_template__ = __webpack_require__("./node_modules/vue-loader/lib/template-compiler/index.js?{\"id\":\"data-v-17e4fea9\",\"hasScoped\":false,\"buble\":{\"transforms\":{}}}!./node_modules/vue-loader/lib/selector.js?type=template&index=0!./resources/assets/js/components/usuario/ShowUsuario.vue")
 /* template functional */
 var __vue_template_functional__ = false
 /* styles */
@@ -4092,7 +4092,7 @@ var Component = normalizeComponent(
   __vue_scopeId__,
   __vue_module_identifier__
 )
-Component.options.__file = "resources\\assets\\js\\components\\usuario\\ShowUsuario.vue"
+Component.options.__file = "resources/assets/js/components/usuario/ShowUsuario.vue"
 
 /* hot reload */
 if (false) {(function () {
@@ -4101,9 +4101,9 @@ if (false) {(function () {
   if (!hotAPI.compatible) return
   module.hot.accept()
   if (!module.hot.data) {
-    hotAPI.createRecord("data-v-68b0899c", Component.options)
+    hotAPI.createRecord("data-v-17e4fea9", Component.options)
   } else {
-    hotAPI.reload("data-v-68b0899c", Component.options)
+    hotAPI.reload("data-v-17e4fea9", Component.options)
   }
   module.hot.dispose(function (data) {
     disposed = true
@@ -4479,7 +4479,7 @@ var usuario = new Vue({
 
 /***/ }),
 
-/***/ 6:
+/***/ 7:
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__("./resources/assets/js/vue/usuario.js");

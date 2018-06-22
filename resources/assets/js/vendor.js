@@ -46,14 +46,8 @@ require('datatables.net-bs');
 
 window.moment = require('moment');
 window.moment.locale('pt-BR');
-
-// require('slimscroll');
-// require('fastclick');
-
+ 
 window.iziToast = require('izitoast');
 window.swal = require('sweetalert2');
 window.select2 = require('select2');
-
-//window.datepicker = require('bootstrap-datepicker');
-// window.datepicker = require('bootstrap-datepicker/js/locales/bootstrap-datepicker.pt-BR');
-
+ 

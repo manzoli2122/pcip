@@ -463,7 +463,7 @@ Axios.prototype.request = function request(config) {
     }, arguments[1]);
   }
 
-  config = utils.merge(defaults, {method: 'get'}, this.defaults, config);
+  config = utils.merge(defaults, this.defaults, { method: 'get' }, config);
   config.method = config.method.toLowerCase();
 
   // Hook up interceptors middleware
@@ -852,10 +852,6 @@ var defaults = {
     return data;
   }],
 
-  /**
-   * A timeout in milliseconds to abort a request. If set to 0 (default) a
-   * timeout is not created.
-   */
   timeout: 0,
 
   xsrfCookieName: 'XSRF-TOKEN',
@@ -998,7 +994,9 @@ module.exports = function buildURL(url, params, paramsSerializer) {
 
       if (utils.isArray(val)) {
         key = key + '[]';
-      } else {
+      }
+
+      if (!utils.isArray(val)) {
         val = [val];
       }
 
@@ -4277,18 +4275,18 @@ return DataTable;
 /***/ "./node_modules/datatables.net/js/jquery.dataTables.js":
 /***/ (function(module, exports, __webpack_require__) {
 
-var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1.10.16
- * ©2008-2017 SpryMedia Ltd - datatables.net/license
+var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1.10.19
+ * ©2008-2018 SpryMedia Ltd - datatables.net/license
  */
 
 /**
  * @summary     DataTables
  * @description Paginate, search and order HTML tables
- * @version     1.10.16
+ * @version     1.10.19
  * @file        jquery.dataTables.js
  * @author      SpryMedia Ltd
  * @contact     www.datatables.net
- * @copyright   Copyright 2008-2017 SpryMedia Ltd.
+ * @copyright   Copyright 2008-2018 SpryMedia Ltd.
  *
  * This source file is free software, available under the following license:
  *   MIT license - http://datatables.net/license
@@ -5189,8 +5187,11 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1
 				var s = allSettings[i];
 			
 				/* Base check on table node */
-				if ( s.nTable == this || s.nTHead.parentNode == this || (s.nTFoot && s.nTFoot.parentNode == this) )
-				{
+				if (
+					s.nTable == this ||
+					(s.nTHead && s.nTHead.parentNode == this) ||
+					(s.nTFoot && s.nTFoot.parentNode == this)
+				) {
 					var bRetrieve = oInit.bRetrieve !== undefined ? oInit.bRetrieve : defaults.bRetrieve;
 					var bDestroy = oInit.bDestroy !== undefined ? oInit.bDestroy : defaults.bDestroy;
 			
@@ -5247,11 +5248,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1
 			
 			// Backwards compatibility, before we apply all the defaults
 			_fnCompatOpts( oInit );
-			
-			if ( oInit.oLanguage )
-			{
-				_fnLanguageCompat( oInit.oLanguage );
-			}
+			_fnLanguageCompat( oInit.oLanguage );
 			
 			// If the length menu is given, but the init display length is not, use the length menu
 			if ( oInit.aLengthMenu && ! oInit.iDisplayLength )
@@ -5634,8 +5631,10 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1
 	// - fr - Swiss Franc
 	// - kr - Swedish krona, Norwegian krone and Danish krone
 	// - \u2009 is thin space and \u202F is narrow no-break space, both used in many
+	// - Ƀ - Bitcoin
+	// - Ξ - Ethereum
 	//   standards as thousands separators.
-	var _re_formatted_numeric = /[',$£€¥%\u2009\u202F\u20BD\u20a9\u20BArfk]/gi;
+	var _re_formatted_numeric = /[',$£€¥%\u2009\u202F\u20BD\u20a9\u20BArfkɃΞ]/gi;
 	
 	
 	var _empty = function ( d ) {
@@ -6010,33 +6009,43 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1
 	 */
 	function _fnLanguageCompat( lang )
 	{
+		// Note the use of the Hungarian notation for the parameters in this method as
+		// this is called after the mapping of camelCase to Hungarian
 		var defaults = DataTable.defaults.oLanguage;
-		var zeroRecords = lang.sZeroRecords;
 	
-		/* Backwards compatibility - if there is no sEmptyTable given, then use the same as
-		 * sZeroRecords - assuming that is given.
-		 */
-		if ( ! lang.sEmptyTable && zeroRecords &&
-			defaults.sEmptyTable === "No data available in table" )
-		{
-			_fnMap( lang, lang, 'sZeroRecords', 'sEmptyTable' );
+		// Default mapping
+		var defaultDecimal = defaults.sDecimal;
+		if ( defaultDecimal ) {
+			_addNumericSort( defaultDecimal );
 		}
 	
-		/* Likewise with loading records */
-		if ( ! lang.sLoadingRecords && zeroRecords &&
-			defaults.sLoadingRecords === "Loading..." )
-		{
-			_fnMap( lang, lang, 'sZeroRecords', 'sLoadingRecords' );
-		}
+		if ( lang ) {
+			var zeroRecords = lang.sZeroRecords;
 	
-		// Old parameter name of the thousands separator mapped onto the new
-		if ( lang.sInfoThousands ) {
-			lang.sThousands = lang.sInfoThousands;
-		}
+			// Backwards compatibility - if there is no sEmptyTable given, then use the same as
+			// sZeroRecords - assuming that is given.
+			if ( ! lang.sEmptyTable && zeroRecords &&
+				defaults.sEmptyTable === "No data available in table" )
+			{
+				_fnMap( lang, lang, 'sZeroRecords', 'sEmptyTable' );
+			}
 	
-		var decimal = lang.sDecimal;
-		if ( decimal ) {
-			_addNumericSort( decimal );
+			// Likewise with loading records
+			if ( ! lang.sLoadingRecords && zeroRecords &&
+				defaults.sLoadingRecords === "Loading..." )
+			{
+				_fnMap( lang, lang, 'sZeroRecords', 'sLoadingRecords' );
+			}
+	
+			// Old parameter name of the thousands separator mapped onto the new
+			if ( lang.sInfoThousands ) {
+				lang.sThousands = lang.sInfoThousands;
+			}
+	
+			var decimal = lang.sDecimal;
+			if ( decimal && defaultDecimal !== decimal ) {
+				_addNumericSort( decimal );
+			}
 		}
 	}
 	
@@ -7408,7 +7417,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1
 				}
 			}
 	
-			_fnCallbackFire( oSettings, 'aoRowCreatedCallback', null, [nTr, rowData, iRow] );
+			_fnCallbackFire( oSettings, 'aoRowCreatedCallback', null, [nTr, rowData, iRow, cells] );
 		}
 	
 		// Remove once webkit bug 131819 and Chromium bug 365619 have been resolved
@@ -7733,7 +7742,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1
 				// iRowCount and j are not currently documented. Are they at all
 				// useful?
 				_fnCallbackFire( oSettings, 'aoRowCallback', null,
-					[nRow, aoData._aData, iRowCount, j] );
+					[nRow, aoData._aData, iRowCount, j, iDataIndex] );
 	
 				anRows.push( nRow );
 				iRowCount++;
@@ -8137,12 +8146,12 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1
 		{
 			ajaxData = ajax.data;
 	
-			var newData = $.isFunction( ajaxData ) ?
+			var newData = typeof ajaxData === 'function' ?
 				ajaxData( data, oSettings ) :  // fn can manipulate data or return
 				ajaxData;                      // an object object or array to merge
 	
 			// If the function returned something, use that alone
-			data = $.isFunction( ajaxData ) && newData ?
+			data = typeof ajaxData === 'function' && newData ?
 				newData :
 				$.extend( true, data, newData );
 	
@@ -8206,7 +8215,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1
 				url: ajax || oSettings.sAjaxSource
 			} ) );
 		}
-		else if ( $.isFunction( ajax ) )
+		else if ( typeof ajax === 'function' )
 		{
 			// Is a function - let the caller define what needs to be done
 			oSettings.jqXHR = ajax.call( instance, data, callback, oSettings );
@@ -9640,14 +9649,18 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1
 		// both match, but we want to hide it completely. We want to also fix their
 		// width to what they currently are
 		_fnApplyToChildren( function(nSizer, i) {
-			nSizer.innerHTML = '<div class="dataTables_sizing" style="height:0;overflow:hidden;">'+headerContent[i]+'</div>';
+			nSizer.innerHTML = '<div class="dataTables_sizing">'+headerContent[i]+'</div>';
+			nSizer.childNodes[0].style.height = "0";
+			nSizer.childNodes[0].style.overflow = "hidden";
 			nSizer.style.width = headerWidths[i];
 		}, headerSrcEls );
 	
 		if ( footer )
 		{
 			_fnApplyToChildren( function(nSizer, i) {
-				nSizer.innerHTML = '<div class="dataTables_sizing" style="height:0;overflow:hidden;">'+footerContent[i]+'</div>';
+				nSizer.innerHTML = '<div class="dataTables_sizing">'+footerContent[i]+'</div>';
+				nSizer.childNodes[0].style.height = "0";
+				nSizer.childNodes[0].style.overflow = "hidden";
 				nSizer.style.width = footerWidths[i];
 			}, footerSrcEls );
 		}
@@ -10841,7 +10854,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1
 	{
 		$(n)
 			.on( 'click.DT', oData, function (e) {
-					n.blur(); // Remove focus outline for mouse users
+					$(n).blur(); // Remove focus outline for mouse users
 					fn(e);
 				} )
 			.on( 'keypress.DT', oData, function (e){
@@ -12081,13 +12094,26 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1
 			}
 		}
 		else if ( order == 'current' || order == 'applied' ) {
-			a = search == 'none' ?
-				displayMaster.slice() :                      // no search
-				search == 'applied' ?
-					displayFiltered.slice() :                // applied search
-					$.map( displayMaster, function (el, i) { // removed search
-						return $.inArray( el, displayFiltered ) === -1 ? el : null;
-					} );
+			if ( search == 'none') {
+				a = displayMaster.slice();
+			}
+			else if ( search == 'applied' ) {
+				a = displayFiltered.slice();
+			}
+			else if ( search == 'removed' ) {
+				// O(n+m) solution by creating a hash map
+				var displayFilteredMap = {};
+	
+				for ( var i=0, ien=displayFiltered.length ; i<ien ; i++ ) {
+					displayFilteredMap[displayFiltered[i]] = null;
+				}
+	
+				a = $.map( displayMaster, function (el) {
+					return ! displayFilteredMap.hasOwnProperty(el) ?
+						el :
+						null;
+				} );
+			}
 		}
 		else if ( order == 'index' || order == 'original' ) {
 			for ( i=0, ien=settings.aoData.length ; i<ien ; i++ ) {
@@ -12120,14 +12146,13 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1
 	 * {array}     - jQuery array of nodes, or simply an array of TR nodes
 	 *
 	 */
-	
-	
 	var __row_selector = function ( settings, selector, opts )
 	{
 		var rows;
 		var run = function ( sel ) {
 			var selInt = _intVal( sel );
 			var i, ien;
+			var aoData = settings.aoData;
 	
 			// Short cut - selector is a number and no options provided (default is
 			// all records, so no need to check if the index is in there, since it
@@ -12152,23 +12177,26 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1
 			// Selector - function
 			if ( typeof sel === 'function' ) {
 				return $.map( rows, function (idx) {
-					var row = settings.aoData[ idx ];
+					var row = aoData[ idx ];
 					return sel( idx, row._aData, row.nTr ) ? idx : null;
 				} );
 			}
 	
-			// Get nodes in the order from the `rows` array with null values removed
-			var nodes = _removeEmpty(
-				_pluck_order( settings.aoData, rows, 'nTr' )
-			);
-	
 			// Selector - node
 			if ( sel.nodeName ) {
-				if ( sel._DT_RowIndex !== undefined ) {
-					return [ sel._DT_RowIndex ]; // Property added by DT for fast lookup
+				var rowIdx = sel._DT_RowIndex;  // Property added by DT for fast lookup
+				var cellIdx = sel._DT_CellIndex;
+	
+				if ( rowIdx !== undefined ) {
+					// Make sure that the row is actually still present in the table
+					return aoData[ rowIdx ] && aoData[ rowIdx ].nTr === sel ?
+						[ rowIdx ] :
+						[];
 				}
-				else if ( sel._DT_CellIndex ) {
-					return [ sel._DT_CellIndex.row ];
+				else if ( cellIdx ) {
+					return aoData[ cellIdx.row ] && aoData[ cellIdx.row ].nTr === sel ?
+						[ cellIdx.row ] :
+						[];
 				}
 				else {
 					var host = $(sel).closest('*[data-dt-row]');
@@ -12197,6 +12225,11 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1
 				// need to fall through to jQuery in case there is DOM id that
 				// matches
 			}
+			
+			// Get nodes in the order from the `rows` array with null values removed
+			var nodes = _removeEmpty(
+				_pluck_order( settings.aoData, rows, 'nTr' )
+			);
 	
 			// Selector - jQuery selector string, array of nodes or jQuery object/
 			// As jQuery's .filter() allows jQuery objects to be passed in filter,
@@ -12391,7 +12424,13 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1
 		}
 	
 		// Set
-		ctx[0].aoData[ this[0] ]._aData = data;
+		var row = ctx[0].aoData[ this[0] ];
+		row._aData = data;
+	
+		// If the DOM has an id, and the data source is an array
+		if ( $.isArray( data ) && row.nTr.id ) {
+			_fnSetObjectDataFn( ctx[0].rowId )( data, row.nTr.id );
+		}
 	
 		// Automatically invalidate
 		_fnInvalidate( ctx[0], this[0], 'data' );
@@ -12817,6 +12856,12 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1
 		_fnDrawHead( settings, settings.aoHeader );
 		_fnDrawHead( settings, settings.aoFooter );
 	
+		// Update colspan for no records display. Child rows and extensions will use their own
+		// listeners to do this - only need to update the empty table item here
+		if ( ! settings.aiDisplay.length ) {
+			$(settings.nTBody).find('td[colspan]').attr('colspan', _fnVisbleColumns(settings));
+		}
+	
 		_fnSaveState( settings );
 	};
 	
@@ -12982,7 +13027,10 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1
 			
 			// Selector - index
 			if ( $.isPlainObject( s ) ) {
-				return [s];
+				// Valid cell index and its in the array of selectable rows
+				return s.column !== undefined && s.row !== undefined && $.inArray( s.row, rows ) !== -1 ?
+					[s] :
+					[];
 			}
 	
 			// Selector - jQuery filtered cells
@@ -13046,11 +13094,11 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1
 		}
 	
 		// Row + column selector
-		var columns = this.columns( columnSelector, opts );
-		var rows = this.rows( rowSelector, opts );
+		var columns = this.columns( columnSelector );
+		var rows = this.rows( rowSelector );
 		var a, i, ien, j, jen;
 	
-		var cells = this.iterator( 'table', function ( settings, idx ) {
+		this.iterator( 'table', function ( settings, idx ) {
 			a = [];
 	
 			for ( i=0, ien=rows[idx].length ; i<ien ; i++ ) {
@@ -13061,9 +13109,10 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1
 					} );
 				}
 			}
-	
-			return a;
 		}, 1 );
+	
+	    // Now pass through the cell selector for options
+	    var cells = this.cells( a, opts );
 	
 		$.extend( cells.selector, {
 			cols: columnSelector,
@@ -13692,7 +13741,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1
 	 *  @type string
 	 *  @default Version number
 	 */
-	DataTable.version = "1.10.16";
+	DataTable.version = "1.10.19";
 
 	/**
 	 * Private data store, containing all of the settings objects that are
@@ -16630,8 +16679,8 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1
 		 *          { "data": "engine" },
 		 *          { "data": "browser" },
 		 *          { "data": "platform.inner" },
-		 *          { "data": "platform.details.0" },
-		 *          { "data": "platform.details.1" }
+		 *          { "data": "details.0" },
+		 *          { "data": "details.1" }
 		 *        ]
 		 *      } );
 		 *    } );
@@ -18428,7 +18477,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1
 			 *    $.fn.dataTable.ext.type.detect.push(
 			 *      function ( data, settings ) {
 			 *        // Check the numeric part
-			 *        if ( ! $.isNumeric( data.substring(1) ) ) {
+			 *        if ( ! data.substring(1).match(/[0-9]/) ) {
 			 *          return null;
 			 *        }
 			 *
@@ -19011,7 +19060,8 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1
 	$.extend( _ext.type.order, {
 		// Dates
 		"date-pre": function ( d ) {
-			return Date.parse( d ) || -Infinity;
+			var ts = Date.parse( d );
+			return isNaN(ts) ? -Infinity : ts;
 		},
 	
 		// html
@@ -19202,7 +19252,8 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1
 	
 		text: function () {
 			return {
-				display: __htmlEscapeEntities
+				display: __htmlEscapeEntities,
+				filter: __htmlEscapeEntities
 			};
 		}
 	};
@@ -19327,6 +19378,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*! DataTables 1
 		_fnRenderer: _fnRenderer,
 		_fnDataSource: _fnDataSource,
 		_fnRowAttributes: _fnRowAttributes,
+		_fnExtend: _fnExtend,
 		_fnCalculateEnd: function () {} // Used by a lot of plug-ins, but redundant
 		                                // in 1.10, so this dead-end function is
 		                                // added to prevent errors
@@ -19556,7 +19608,7 @@ function isSlowBuffer (obj) {
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*
-* iziToast | v1.2.0
+* iziToast | v1.3.0
 * http://izitoast.marcelodolce.com
 * by Marcelo Dolce.
 */
@@ -19611,6 +19663,7 @@ function isSlowBuffer (obj) {
 		MOBILEWIDTH = 568,
 		CONFIG = {};
 
+	$iziToast.children = {};
 
 	// Default settings
 	var defaults = {
@@ -19638,6 +19691,7 @@ function isSlowBuffer (obj) {
 		balloon: false,
 		close: true,
 		closeOnEscape: false,
+		closeOnClick: false,
 		rtl: false,
 		position: 'bottomRight', // bottomRight, bottomLeft, topRight, topLeft, topCenter, bottomCenter, center
 		target: '',
@@ -19659,6 +19713,7 @@ function isSlowBuffer (obj) {
 		transitionInMobile: 'fadeInUp',
 		transitionOutMobile: 'fadeOutDown',
 		buttons: {},
+		inputs: {},
 		onOpening: function () {},
 		onOpened: function () {},
 		onClosing: function () {},
@@ -19696,7 +19751,7 @@ function isSlowBuffer (obj) {
         CustomEventPolyfill.prototype = window.Event.prototype;
 
         window.CustomEvent = CustomEventPolyfill;
-    } 
+    }
 
 	/**
 	 * A simple forEach() implementation for Arrays, Objects and NodeLists
@@ -19803,12 +19858,12 @@ function isSlowBuffer (obj) {
 		            if(xpos > 0){
 		            	opacity = (distance-xpos) / distance;
 		            	if(opacity < opacityRange){
-							instance.hide(toast, extend(settings, { transitionOut: 'fadeOutRight', transitionOutMobile: 'fadeOutRight' }), 'drag');
+							instance.hide(extend(settings, { transitionOut: 'fadeOutRight', transitionOutMobile: 'fadeOutRight' }), toast, 'drag');
 						}
 		            } else {
 		            	opacity = (distance+xpos) / distance;
 		            	if(opacity < opacityRange){
-							instance.hide(toast, extend(settings, { transitionOut: 'fadeOutLeft', transitionOutMobile: 'fadeOutLeft' }), 'drag');
+							instance.hide(extend(settings, { transitionOut: 'fadeOutLeft', transitionOutMobile: 'fadeOutLeft' }), toast, 'drag');
 						}
 		            }
 					toast.style.opacity = opacity;
@@ -19884,6 +19939,23 @@ function isSlowBuffer (obj) {
 	}();
 
 
+
+
+
+	$iziToast.setSetting = function (ref, option, value) {
+
+		$iziToast.children[ref][option] = value;
+
+	};
+
+
+	$iziToast.getSetting = function (ref, option) {
+
+		return $iziToast.children[ref][option];
+
+	};
+
+
 	/**
 	 * Destroy the current initialization.
 	 * @public
@@ -19946,86 +20018,116 @@ function isSlowBuffer (obj) {
 	 * Do the calculation to move the progress bar
 	 * @private
 	 */
-	 $iziToast.progress = function ($toast, options, callback) {
+	$iziToast.progress = function (options, $toast, callback) {
+
 
 		var that = this,
-			settings = extend(that.settings, options || {}),
+			ref = $toast.getAttribute('data-iziToast-ref'),
+			settings = extend(this.children[ref], options || {}),
 			$elem = $toast.querySelector('.'+PLUGIN_NAME+'-progressbar div');
 
 	    return {
 	        start: function() {
 
-	        	if($elem !== null){
-					$elem.style.transition = 'width '+ settings.timeout +'ms '+settings.progressBarEasing;
-					$elem.style.width = '0%';
-				}
-	        	settings.TIME.START = new Date().getTime();
-	        	settings.TIME.END = settings.TIME.START + settings.timeout;
-				settings.TIME.TIMER = setTimeout(function() {
+	        	if(typeof settings.time.REMAINING == 'undefined'){
 
-					clearTimeout(settings.TIME.TIMER);
+	        		$toast.classList.remove(PLUGIN_NAME+'-reseted');
 
-					if(!$toast.classList.contains(PLUGIN_NAME+'-closing')){
-
-						that.hide($toast, settings, 'timeout');
-
-						if(typeof callback === 'function'){
-							callback.apply(that);
-						}
+		        	if($elem !== null){
+						$elem.style.transition = 'width '+ settings.timeout +'ms '+settings.progressBarEasing;
+						$elem.style.width = '0%';
 					}
 
-				}, settings.timeout);
-				
+		        	settings.time.START = new Date().getTime();
+		        	settings.time.END = settings.time.START + settings.timeout;
+					settings.time.TIMER = setTimeout(function() {
+
+						clearTimeout(settings.time.TIMER);
+
+						if(!$toast.classList.contains(PLUGIN_NAME+'-closing')){
+
+							that.hide(settings, $toast, 'timeout');
+
+							if(typeof callback === 'function'){
+								callback.apply(that);
+							}
+						}
+
+					}, settings.timeout);			
+		        	that.setSetting(ref, 'time', settings.time);
+	        	}
 	        },
 	        pause: function() {
 
-				settings.TIME.REMAINING = settings.TIME.END - new Date().getTime();
+	        	if(typeof settings.time.START !== 'undefined' && !$toast.classList.contains(PLUGIN_NAME+'-paused') && !$toast.classList.contains(PLUGIN_NAME+'-reseted')){
 
-				clearTimeout(settings.TIME.TIMER);
+        			$toast.classList.add(PLUGIN_NAME+'-paused');
 
-				if($elem !== null){
-					var computedStyle = window.getComputedStyle($elem),
-						propertyWidth = computedStyle.getPropertyValue('width');
+					settings.time.REMAINING = settings.time.END - new Date().getTime();
 
-					$elem.style.transition = 'none';
-					$elem.style.width = propertyWidth;					
-				}
+					clearTimeout(settings.time.TIMER);
 
-				if(typeof callback === 'function'){
-					setTimeout(function() {
-						callback.apply(that);						
-					}, 10);
-				}
+					that.setSetting(ref, 'time', settings.time);
 
+					if($elem !== null){
+						var computedStyle = window.getComputedStyle($elem),
+							propertyWidth = computedStyle.getPropertyValue('width');
+
+						$elem.style.transition = 'none';
+						$elem.style.width = propertyWidth;					
+					}
+
+					if(typeof callback === 'function'){
+						setTimeout(function() {
+							callback.apply(that);						
+						}, 10);
+					}
+        		}
 	        },
 	        resume: function() {
 
-	        	if($elem !== null){
-					$elem.style.transition = 'width '+ settings.TIME.REMAINING +'ms '+settings.progressBarEasing;
-					$elem.style.width = '0%';
-				}
+				if(typeof settings.time.REMAINING !== 'undefined'){
 
-	        	settings.TIME.END = new Date().getTime() + settings.TIME.REMAINING;
-				settings.TIME.TIMER = setTimeout(function() {
+					$toast.classList.remove(PLUGIN_NAME+'-paused');
 
-					clearTimeout(settings.TIME.TIMER);
-
-					if(!$toast.classList.contains(PLUGIN_NAME+'-closing')){
-
-						that.hide($toast, settings, 'timeout');
-
-						if(typeof callback === 'function'){
-							callback.apply(that);
-						}
+		        	if($elem !== null){
+						$elem.style.transition = 'width '+ settings.time.REMAINING +'ms '+settings.progressBarEasing;
+						$elem.style.width = '0%';
 					}
 
+		        	settings.time.END = new Date().getTime() + settings.time.REMAINING;
+					settings.time.TIMER = setTimeout(function() {
 
-				}, settings.TIME.REMAINING);
+						clearTimeout(settings.time.TIMER);
 
+						if(!$toast.classList.contains(PLUGIN_NAME+'-closing')){
+
+							that.hide(settings, $toast, 'timeout');
+
+							if(typeof callback === 'function'){
+								callback.apply(that);
+							}
+						}
+
+
+					}, settings.time.REMAINING);
+
+					that.setSetting(ref, 'time', settings.time);
+				} else {
+					this.start();
+				}
 	        },
 	        reset: function(){
 
-				clearTimeout(settings.TIME.TIMER);
+				clearTimeout(settings.time.TIMER);
+
+				delete settings.time.REMAINING;
+
+				that.setSetting(ref, 'time', settings.time);
+
+				$toast.classList.add(PLUGIN_NAME+'-reseted');
+
+				$toast.classList.remove(PLUGIN_NAME+'-paused');
 
 				if($elem !== null){
 					$elem.style.transition = 'none';
@@ -20037,7 +20139,6 @@ function isSlowBuffer (obj) {
 						callback.apply(that);						
 					}, 10);
 				}
-
 	        }
 	    };
 
@@ -20049,19 +20150,19 @@ function isSlowBuffer (obj) {
 	 * @public
 	 * @param {Object} options User settings
 	 */
-	$iziToast.hide = function ($toast, options, closedBy) {
+	$iziToast.hide = function (options, $toast, closedBy) {
 
-		var settings = extend(this.settings, options || {});
-			closedBy = closedBy || null;
+		var that = this,
+			settings = extend(this.children[$toast.getAttribute('data-iziToast-ref')], options || {});
+			settings.closedBy = closedBy || null;
+
+		delete settings.time.REMAINING;
 
 		if(typeof $toast != 'object'){
 			$toast = document.querySelector($toast);
-		}
+		}		
 
 		$toast.classList.add(PLUGIN_NAME+'-closing');
-
-		settings.closedBy = closedBy;
-		settings.REF = $toast.getAttribute('data-iziToast-ref');
 
 		// Overlay
 		(function(){
@@ -20070,7 +20171,7 @@ function isSlowBuffer (obj) {
 			if($overlay !== null){
 				var refs = $overlay.getAttribute('data-iziToast-ref');		
 					refs = refs.split(',');
-				var index = refs.indexOf(settings.REF);
+				var index = refs.indexOf(String(settings.ref));
 
 				if(index !== -1){
 					refs.splice(index, 1);			
@@ -20109,7 +20210,6 @@ function isSlowBuffer (obj) {
 		}
 
 		try {
-			settings.closedBy = closedBy;
 			var event = new CustomEvent(PLUGIN_NAME+'-closing', {detail: settings, bubbles: true, cancelable: true});
 			document.dispatchEvent(event);
 		} catch(ex){
@@ -20123,9 +20223,11 @@ function isSlowBuffer (obj) {
 
 			setTimeout(function(){
 				
+				delete that.children[settings.ref];
+
 				$toast.parentNode.remove();
+
 				try {
-					settings.closedBy = closedBy;
 					var event = new CustomEvent(PLUGIN_NAME+'-closed', {detail: settings, bubbles: true, cancelable: true});
 					document.dispatchEvent(event);
 				} catch(ex){
@@ -20157,14 +20259,15 @@ function isSlowBuffer (obj) {
 		// Merge user options with defaults
 		var settings = extend(CONFIG, options || {});
 			settings = extend(defaults, settings);
-
-			settings.TIME = {};
+			settings.time = {};
 
 		if(settings.toastOnce && settings.id && document.querySelectorAll('.'+PLUGIN_NAME+'#'+settings.id).length > 0){
 			return false;
 		}
 
-		settings.REF = new Date().getTime() + Math.floor((Math.random() * 10000000) + 1);
+		settings.ref = new Date().getTime() + Math.floor((Math.random() * 10000000) + 1);
+
+		$iziToast.children[settings.ref] = settings;
 
 		var $DOM = {
 			body: document.querySelector('body'),
@@ -20176,10 +20279,11 @@ function isSlowBuffer (obj) {
 			icon: document.createElement('i'),
 			cover: document.createElement('div'),
 			buttons: document.createElement('div'),
+			inputs: document.createElement('div'),
 			wrapper: null
 		};
 
-		$DOM.toast.setAttribute('data-iziToast-ref', settings.REF);
+		$DOM.toast.setAttribute('data-iziToast-ref', settings.ref);
 		$DOM.toast.appendChild($DOM.toastBody);
 		$DOM.toastCapsule.appendChild($DOM.toast);
 
@@ -20209,7 +20313,10 @@ function isSlowBuffer (obj) {
 
 			if(settings.id){ $DOM.toast.id = settings.id; }
 
-			if(settings.rtl){ $DOM.toast.classList.add(PLUGIN_NAME + '-rtl'); }
+			if(settings.rtl){
+				$DOM.toast.classList.add(PLUGIN_NAME + '-rtl');
+				$DOM.toast.setAttribute('dir', 'rtl');
+			}
 
 			if(settings.layout > 1){ $DOM.toast.classList.add(PLUGIN_NAME+'-layout'+settings.layout); }
 
@@ -20275,56 +20382,49 @@ function isSlowBuffer (obj) {
 				$DOM.buttonClose.classList.add(PLUGIN_NAME + '-close');
 				$DOM.buttonClose.addEventListener('click', function (e) {
 					var button = e.target;
-					that.hide($DOM.toast, settings, 'button');
+					that.hide(settings, $DOM.toast, 'button');
 				});
 				$DOM.toast.appendChild($DOM.buttonClose);
 			} else {
 				if(settings.rtl){
-					$DOM.toast.style.paddingLeft = '20px';
+					$DOM.toast.style.paddingLeft = '18px';
 				} else {
-					$DOM.toast.style.paddingRight = '20px';
+					$DOM.toast.style.paddingRight = '18px';
 				}
 			}
 		})();
 
 		// Progress Bar & Timeout
 		(function(){
-			if(settings.timeout) {
 
-				if(settings.progressBar){
-					$DOM.progressBar = document.createElement('div');
-					$DOM.progressBarDiv = document.createElement('div');
-					$DOM.progressBar.classList.add(PLUGIN_NAME + '-progressbar');
-					$DOM.progressBarDiv.style.background = settings.progressBarColor;
-					$DOM.progressBar.appendChild($DOM.progressBarDiv);
-					$DOM.toast.appendChild($DOM.progressBar);
-				}
+			if(settings.progressBar){
+				$DOM.progressBar = document.createElement('div');
+				$DOM.progressBarDiv = document.createElement('div');
+				$DOM.progressBar.classList.add(PLUGIN_NAME + '-progressbar');
+				$DOM.progressBarDiv.style.background = settings.progressBarColor;
+				$DOM.progressBar.appendChild($DOM.progressBarDiv);
+				$DOM.toast.appendChild($DOM.progressBar);
+			}
+
+			if(settings.timeout) {
 
 				if(settings.pauseOnHover && !settings.resetOnHover){
 					
 					$DOM.toast.addEventListener('mouseenter', function (e) {
-						this.classList.add(PLUGIN_NAME+'-paused');
-
-						that.progress($DOM.toast, settings).pause();
+						that.progress(settings, $DOM.toast).pause();
 					});
 					$DOM.toast.addEventListener('mouseleave', function (e) {
-						this.classList.remove(PLUGIN_NAME+'-paused');
-
-						that.progress($DOM.toast, settings).resume();
+						that.progress(settings, $DOM.toast).resume();
 					});
 				}
 
 				if(settings.resetOnHover){
 
 					$DOM.toast.addEventListener('mouseenter', function (e) {
-						this.classList.add(PLUGIN_NAME+'-reseted');
-
-						that.progress($DOM.toast, settings).reset();
+						that.progress(settings, $DOM.toast).reset();
 					});
 					$DOM.toast.addEventListener('mouseleave', function (e) {
-						this.classList.remove(PLUGIN_NAME+'-reseted');
-
-						that.progress($DOM.toast, settings).start();
+						that.progress(settings, $DOM.toast).start();
 					});
 				}
 			}
@@ -20352,7 +20452,7 @@ function isSlowBuffer (obj) {
 			}
 		})();
 
-		// Title
+		// Title & Message
 		(function(){
 			if(settings.title.length > 0) {
 
@@ -20379,10 +20479,7 @@ function isSlowBuffer (obj) {
 					}
 				}
 			}
-		})();
-		
-		// Message
-		(function(){
+
 			if(settings.message.length > 0) {
 
 				$DOM.p = document.createElement('p');
@@ -20409,39 +20506,52 @@ function isSlowBuffer (obj) {
 					}
 				}
 			}
+
+			if(settings.title.length > 0 && settings.message.length > 0) {
+				if(settings.rtl){
+					$DOM.strong.style.marginLeft = '10px';
+				} else if(settings.layout !== 2 && !settings.rtl) {
+					$DOM.strong.style.marginRight = '10px';	
+				}
+			}
 		})();
 
-		if(settings.title.length > 0 && settings.message.length > 0) {
-			if(settings.rtl){
-				$DOM.strong.style.marginLeft = '10px';
-			} else if(settings.layout !== 2 && !settings.rtl) {
-				$DOM.strong.style.marginRight = '10px';	
-			}
-		}
-
 		$DOM.toastBody.appendChild($DOM.toastTexts);
+
+		// Inputs
+		var $inputs;
+		(function(){
+			if(settings.inputs.length > 0) {
+
+				$DOM.inputs.classList.add(PLUGIN_NAME + '-inputs');
+
+				forEach(settings.inputs, function (value, index) {
+					$DOM.inputs.appendChild(createFragElem(value[0]));
+
+					$inputs = $DOM.inputs.childNodes;
+
+					$inputs[index].classList.add(PLUGIN_NAME + '-inputs-child');
+
+					if(value[3]){
+						setTimeout(function() {
+							$inputs[index].focus();
+						}, 300);
+					}
+
+					$inputs[index].addEventListener(value[1], function (e) {
+						var ts = value[2];
+						return ts(that, $DOM.toast, this, e);
+					});
+				});
+				$DOM.toastBody.appendChild($DOM.inputs);
+			}
+		})();
 
 		// Buttons
 		(function(){
 			if(settings.buttons.length > 0) {
 
 				$DOM.buttons.classList.add(PLUGIN_NAME + '-buttons');
-
-				if(settings.title.length > 0 && settings.message.length === 0) {
-					if(settings.rtl){
-						$DOM.strong.style.marginLeft = '15px';
-					} else {
-						$DOM.strong.style.marginRight = '15px';
-					}
-				}
-				if(settings.message.length > 0) {
-					if(settings.rtl){
-						$DOM.p.style.marginLeft = '15px';
-					} else {
-						$DOM.p.style.marginRight = '15px';
-					}
-					$DOM.p.style.marginBottom = '0';
-				}
 
 				forEach(settings.buttons, function (value, index) {
 					$DOM.buttons.appendChild(createFragElem(value[0]));
@@ -20459,14 +20569,33 @@ function isSlowBuffer (obj) {
 					$btns[index].addEventListener('click', function (e) {
 						e.preventDefault();
 						var ts = value[1];
-						return ts(that, $DOM.toast);
+						return ts(that, $DOM.toast, this, e, $inputs);
 					});
 				});
 			}
 			$DOM.toastBody.appendChild($DOM.buttons);
 		})();
 
-		// Target
+		if(settings.message.length > 0 && (settings.inputs.length > 0 || settings.buttons.length > 0)) {
+			$DOM.p.style.marginBottom = '0';
+		}
+
+		if(settings.inputs.length > 0 || settings.buttons.length > 0){
+			if(settings.rtl){
+				$DOM.toastTexts.style.marginLeft = '10px';
+			} else {
+				$DOM.toastTexts.style.marginRight = '10px';
+			}
+			if(settings.inputs.length > 0 && settings.buttons.length > 0){
+				if(settings.rtl){
+					$DOM.inputs.style.marginLeft = '8px';
+				} else {
+					$DOM.inputs.style.marginRight = '8px';
+				}
+			}
+		}
+
+		// Wrap
 		(function(){
 			$DOM.toastCapsule.style.visibility = 'hidden';
 			setTimeout(function() {
@@ -20490,7 +20619,7 @@ function isSlowBuffer (obj) {
 				}, 500);
 
 				if(settings.timeout) {
-					that.progress($DOM.toast, settings).start();
+					that.progress(settings, $DOM.toast).start();
 				}
 			}, 100);
 		})();
@@ -20560,17 +20689,18 @@ function isSlowBuffer (obj) {
 				if( document.querySelector('.'+PLUGIN_NAME+'-overlay.fadeIn') !== null ){
 
 					$DOM.overlay = document.querySelector('.'+PLUGIN_NAME+'-overlay');
-					$DOM.overlay.setAttribute('data-iziToast-ref', $DOM.overlay.getAttribute('data-iziToast-ref') + ',' + settings.REF);
+					$DOM.overlay.setAttribute('data-iziToast-ref', $DOM.overlay.getAttribute('data-iziToast-ref') + ',' + settings.ref);
 
 					if(!isNaN(settings.zindex) && settings.zindex !== null) {
 						$DOM.overlay.style.zIndex = settings.zindex-1;
 					}
+
 				} else {
 
 					$DOM.overlay.classList.add(PLUGIN_NAME+'-overlay');
 					$DOM.overlay.classList.add('fadeIn');
 					$DOM.overlay.style.background = settings.overlayColor;
-					$DOM.overlay.setAttribute('data-iziToast-ref', settings.REF);
+					$DOM.overlay.setAttribute('data-iziToast-ref', settings.ref);
 					if(!isNaN(settings.zindex) && settings.zindex !== null) {
 						$DOM.overlay.style.zIndex = settings.zindex-1;
 					}
@@ -20581,7 +20711,7 @@ function isSlowBuffer (obj) {
 
 					$DOM.overlay.removeEventListener('click', {});
 					$DOM.overlay.addEventListener('click', function (e) {
-						that.hide($DOM.toast, settings, 'overlay');
+						that.hide(settings, $DOM.toast, 'overlay');
 					});
 				} else {
 					$DOM.overlay.removeEventListener('click', {});
@@ -20597,7 +20727,7 @@ function isSlowBuffer (obj) {
 				$DOM.toast.classList.add(PLUGIN_NAME+'-animateInside');
 			
 				var animationTimes = [200, 100, 300];
-				if(settings.transitionIn == 'bounceInLeft'){
+				if(settings.transitionIn == 'bounceInLeft' || settings.transitionIn == 'bounceInRight'){
 					animationTimes = [400, 200, 400];
 				}
 
@@ -20619,9 +20749,25 @@ function isSlowBuffer (obj) {
 					}, animationTimes[2]);
 				}
 
+				var counter = 150;
 				if(settings.buttons.length > 0 && $DOM.buttons) {
-					var counter = 150;
-					forEach($DOM.buttons.childNodes, function(element, index) {
+
+					setTimeout(function(){
+
+						forEach($DOM.buttons.childNodes, function(element, index) {
+
+							setTimeout(function(){
+								element.classList.add('revealIn');
+							}, counter);
+							counter = counter + 150;
+						});
+
+					}, settings.inputs.length > 0 ? 150 : 0);
+				}
+
+				if(settings.inputs.length > 0 && $DOM.inputs) {
+					counter = 150;
+					forEach($DOM.inputs.childNodes, function(element, index) {
 
 						setTimeout(function(){
 							element.classList.add('revealIn');
@@ -20686,8 +20832,14 @@ function isSlowBuffer (obj) {
 			document.addEventListener('keyup', function (evt) {
 				evt = evt || window.event;
 				if(evt.keyCode == 27) {
-				    that.hide($DOM.toast, settings, 'esc');
+				    that.hide(settings, $DOM.toast, 'esc');
 				}
+			});
+		}
+
+		if(settings.closeOnClick) {
+			$DOM.toast.addEventListener('click', function (evt) {
+				that.hide(settings, $DOM.toast, 'toast');
 			});
 		}
 
@@ -31090,7 +31242,7 @@ return jQuery;
   var undefined;
 
   /** Used as the semantic version number. */
-  var VERSION = '4.17.5';
+  var VERSION = '4.17.10';
 
   /** Used as the size to enable large array optimizations. */
   var LARGE_ARRAY_SIZE = 200;
@@ -31514,6 +31666,14 @@ return jQuery;
   /** Used to access faster Node.js helpers. */
   var nodeUtil = (function() {
     try {
+      // Use `util.types` for Node.js 10+.
+      var types = freeModule && freeModule.require && freeModule.require('util').types;
+
+      if (types) {
+        return types;
+      }
+
+      // Legacy `process.binding('util')` for Node.js < 10.
       return freeProcess && freeProcess.binding && freeProcess.binding('util');
     } catch (e) {}
   }());
@@ -49217,7 +49377,7 @@ webpackContext.id = "./node_modules/moment/locale recursive ^\\.\\/.*$";
         relativeTime : {
             future : '%s sonra',
             past : '%s əvvəl',
-            s : 'birneçə saniyyə',
+            s : 'birneçə saniyə',
             ss : '%d saniyə',
             m : 'bir dəqiqə',
             mm : '%d dəqiqə',
@@ -49313,7 +49473,7 @@ webpackContext.id = "./node_modules/moment/locale recursive ^\\.\\/.*$";
         weekdays : {
             format: 'нядзелю_панядзелак_аўторак_сераду_чацвер_пятніцу_суботу'.split('_'),
             standalone: 'нядзеля_панядзелак_аўторак_серада_чацвер_пятніца_субота'.split('_'),
-            isFormat: /\[ ?[Вв] ?(?:мінулую|наступную)? ?\] ?dddd/
+            isFormat: /\[ ?[Ууў] ?(?:мінулую|наступную)? ?\] ?dddd/
         },
         weekdaysShort : 'нд_пн_ат_ср_чц_пт_сб'.split('_'),
         weekdaysMin : 'нд_пн_ат_ср_чц_пт_сб'.split('_'),
@@ -56619,7 +56779,7 @@ webpackContext.id = "./node_modules/moment/locale recursive ^\\.\\/.*$";
         calendar : {
             sameDay : '[ਅਜ] LT',
             nextDay : '[ਕਲ] LT',
-            nextWeek : 'dddd, LT',
+            nextWeek : '[ਅਗਲਾ] dddd, LT',
             lastDay : '[ਕਲ] LT',
             lastWeek : '[ਪਿਛਲੇ] dddd, LT',
             sameElse : 'L'
@@ -57118,28 +57278,28 @@ webpackContext.id = "./node_modules/moment/locale recursive ^\\.\\/.*$";
             LLLL : 'dddd, D MMMM YYYY г., H:mm'
         },
         calendar : {
-            sameDay: '[Сегодня в] LT',
-            nextDay: '[Завтра в] LT',
-            lastDay: '[Вчера в] LT',
+            sameDay: '[Сегодня, в] LT',
+            nextDay: '[Завтра, в] LT',
+            lastDay: '[Вчера, в] LT',
             nextWeek: function (now) {
                 if (now.week() !== this.week()) {
                     switch (this.day()) {
                         case 0:
-                            return '[В следующее] dddd [в] LT';
+                            return '[В следующее] dddd, [в] LT';
                         case 1:
                         case 2:
                         case 4:
-                            return '[В следующий] dddd [в] LT';
+                            return '[В следующий] dddd, [в] LT';
                         case 3:
                         case 5:
                         case 6:
-                            return '[В следующую] dddd [в] LT';
+                            return '[В следующую] dddd, [в] LT';
                     }
                 } else {
                     if (this.day() === 2) {
-                        return '[Во] dddd [в] LT';
+                        return '[Во] dddd, [в] LT';
                     } else {
-                        return '[В] dddd [в] LT';
+                        return '[В] dddd, [в] LT';
                     }
                 }
             },
@@ -57147,21 +57307,21 @@ webpackContext.id = "./node_modules/moment/locale recursive ^\\.\\/.*$";
                 if (now.week() !== this.week()) {
                     switch (this.day()) {
                         case 0:
-                            return '[В прошлое] dddd [в] LT';
+                            return '[В прошлое] dddd, [в] LT';
                         case 1:
                         case 2:
                         case 4:
-                            return '[В прошлый] dddd [в] LT';
+                            return '[В прошлый] dddd, [в] LT';
                         case 3:
                         case 5:
                         case 6:
-                            return '[В прошлую] dddd [в] LT';
+                            return '[В прошлую] dddd, [в] LT';
                     }
                 } else {
                     if (this.day() === 2) {
-                        return '[Во] dddd [в] LT';
+                        return '[Во] dddd, [в] LT';
                     } else {
-                        return '[В] dddd [в] LT';
+                        return '[В] dddd, [в] LT';
                     }
                 }
             },
@@ -61893,9 +62053,9 @@ webpackContext.id = "./node_modules/moment/locale recursive ^\\.\\/.*$";
 
             mom = createUTC([2000, 1]).day(i);
             if (strict && !this._fullWeekdaysParse[i]) {
-                this._fullWeekdaysParse[i] = new RegExp('^' + this.weekdays(mom, '').replace('.', '\.?') + '$', 'i');
-                this._shortWeekdaysParse[i] = new RegExp('^' + this.weekdaysShort(mom, '').replace('.', '\.?') + '$', 'i');
-                this._minWeekdaysParse[i] = new RegExp('^' + this.weekdaysMin(mom, '').replace('.', '\.?') + '$', 'i');
+                this._fullWeekdaysParse[i] = new RegExp('^' + this.weekdays(mom, '').replace('.', '\\.?') + '$', 'i');
+                this._shortWeekdaysParse[i] = new RegExp('^' + this.weekdaysShort(mom, '').replace('.', '\\.?') + '$', 'i');
+                this._minWeekdaysParse[i] = new RegExp('^' + this.weekdaysMin(mom, '').replace('.', '\\.?') + '$', 'i');
             }
             if (!this._weekdaysParse[i]) {
                 regex = '^' + this.weekdays(mom, '') + '|^' + this.weekdaysShort(mom, '') + '|^' + this.weekdaysMin(mom, '');
@@ -62698,7 +62858,7 @@ webpackContext.id = "./node_modules/moment/locale recursive ^\\.\\/.*$";
 
     function preprocessRFC2822(s) {
         // Remove comments and folding whitespace and replace multiple-spaces with a single space
-        return s.replace(/\([^)]*\)|[\n\t]/g, ' ').replace(/(\s\s+)/g, ' ').trim();
+        return s.replace(/\([^)]*\)|[\n\t]/g, ' ').replace(/(\s\s+)/g, ' ').replace(/^\s\s*/, '').replace(/\s\s*$/, '');
     }
 
     function checkWeekday(weekdayStr, parsedInput, config) {
@@ -64080,7 +64240,7 @@ webpackContext.id = "./node_modules/moment/locale recursive ^\\.\\/.*$";
 
     addUnitAlias('date', 'D');
 
-    // PRIOROITY
+    // PRIORITY
     addUnitPriority('date', 9);
 
     // PARSING
@@ -64877,7 +65037,7 @@ webpackContext.id = "./node_modules/moment/locale recursive ^\\.\\/.*$";
     // Side effect imports
 
 
-    hooks.version = '2.22.0';
+    hooks.version = '2.22.2';
 
     setHookCallback(createLocal);
 
@@ -70982,7 +71142,7 @@ S2.define('jquery.select2',[
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
-* sweetalert2 v7.18.0
+* sweetalert2 v7.24.1
 * Released under the MIT License.
 */
 (function (global, factory) {
@@ -71174,7 +71334,7 @@ var uniqueArray = function uniqueArray(arr) {
  */
 var formatInputOptions = function formatInputOptions(inputOptions) {
   var result = [];
-  if (inputOptions instanceof Map) {
+  if (typeof Map !== 'undefined' && inputOptions instanceof Map) {
     inputOptions.forEach(function (value, key) {
       result.push([key, value]);
     });
@@ -71241,15 +71401,21 @@ var DismissReason = Object.freeze({
   timer: 'timer'
 });
 
-var version = "7.18.0";
+var version = "7.24.1";
 
 var argsToParams = function argsToParams(args) {
   var params = {};
   switch (_typeof(args[0])) {
     case 'string':
       ['title', 'html', 'type'].forEach(function (name, index) {
-        if (args[index] !== undefined) {
-          params[name] = args[index];
+        switch (_typeof(args[index])) {
+          case 'string':
+            params[name] = args[index];
+            break;
+          case 'undefined':
+            break;
+          default:
+            error('Unexpected type of ' + name + '! Expected "string", got ' + _typeof(args[index]));
         }
       });
       break;
@@ -71288,13 +71454,12 @@ var prefix = function prefix(items) {
   return result;
 };
 
-var swalClasses = prefix(['container', 'shown', 'iosfix', 'popup', 'modal', 'no-backdrop', 'toast', 'toast-shown', 'fade', 'show', 'hide', 'noanimation', 'close', 'title', 'header', 'content', 'actions', 'confirm', 'cancel', 'footer', 'icon', 'icon-text', 'image', 'input', 'has-input', 'file', 'range', 'select', 'radio', 'checkbox', 'textarea', 'inputerror', 'validationerror', 'progresssteps', 'activeprogressstep', 'progresscircle', 'progressline', 'loading', 'styled', 'top', 'top-start', 'top-end', 'top-left', 'top-right', 'center', 'center-start', 'center-end', 'center-left', 'center-right', 'bottom', 'bottom-start', 'bottom-end', 'bottom-left', 'bottom-right', 'grow-row', 'grow-column', 'grow-fullscreen']);
+var swalClasses = prefix(['container', 'shown', 'height-auto', 'iosfix', 'popup', 'modal', 'no-backdrop', 'toast', 'toast-shown', 'fade', 'show', 'hide', 'noanimation', 'close', 'title', 'header', 'content', 'actions', 'confirm', 'cancel', 'footer', 'icon', 'icon-text', 'image', 'input', 'has-input', 'file', 'range', 'select', 'radio', 'checkbox', 'textarea', 'inputerror', 'validationerror', 'progresssteps', 'activeprogressstep', 'progresscircle', 'progressline', 'loading', 'styled', 'top', 'top-start', 'top-end', 'top-left', 'top-right', 'center', 'center-start', 'center-end', 'center-left', 'center-right', 'bottom', 'bottom-start', 'bottom-end', 'bottom-left', 'bottom-right', 'grow-row', 'grow-column', 'grow-fullscreen']);
 
 var iconTypes = prefix(['success', 'warning', 'info', 'question', 'error']);
 
 // Remember state in cases where opening and handling a modal will fiddle with it.
 var states = {
-  previousActiveElement: null,
   previousBodyPadding: null
 };
 
@@ -71377,19 +71542,6 @@ var removeStyleProperty = function removeStyleProperty(elem, property) {
     elem.style.removeProperty(property);
   } else {
     elem.style.removeAttribute(property);
-  }
-};
-
-// Reset previous window keydown handler and focued element
-var resetPrevState = function resetPrevState() {
-  if (states.previousActiveElement && states.previousActiveElement.focus) {
-    var x = window.scrollX;
-    var y = window.scrollY;
-    states.previousActiveElement.focus();
-    if (typeof x !== 'undefined' && typeof y !== 'undefined') {
-      // IE doesn't have scrollX/scrollY support
-      window.scrollTo(x, y);
-    }
   }
 };
 
@@ -71535,8 +71687,12 @@ var init = function init(params) {
     popup.setAttribute('aria-modal', 'true');
   }
 
-  var resetValidationError = function resetValidationError() {
-    SweetAlert.isVisible() && SweetAlert.resetValidationError();
+  var oldInputVal = void 0; // IE11 workaround, see #1109 for details
+  var resetValidationError = function resetValidationError(e) {
+    if (Swal.isVisible() && oldInputVal !== e.target.value) {
+      Swal.resetValidationError();
+    }
+    oldInputVal = e.target.value;
   };
 
   input.oninput = resetValidationError;
@@ -71545,13 +71701,13 @@ var init = function init(params) {
   checkbox.onchange = resetValidationError;
   textarea.oninput = resetValidationError;
 
-  range.oninput = function () {
-    resetValidationError();
+  range.oninput = function (e) {
+    resetValidationError(e);
     rangeOutput.value = range.value;
   };
 
-  range.onchange = function () {
-    resetValidationError();
+  range.onchange = function (e) {
+    resetValidationError(e);
     range.nextSibling.value = range.value;
   };
 
@@ -71624,8 +71780,8 @@ var fixScrollbar = function fixScrollbar() {
   // if the body has overflow
   if (document.body.scrollHeight > window.innerHeight) {
     // add padding so the content doesn't shift after removal of scrollbar
-    states.previousBodyPadding = document.body.style.paddingRight;
-    document.body.style.paddingRight = measureScrollbar() + 'px';
+    states.previousBodyPadding = parseInt(window.getComputedStyle(document.body).getPropertyValue('padding-right'));
+    document.body.style.paddingRight = states.previousBodyPadding + measureScrollbar() + 'px';
   }
 };
 
@@ -71655,6 +71811,138 @@ var undoIOSfix = function undoIOSfix() {
   }
 };
 
+var globalState = {};
+
+// Restore previous active (focused) element
+var restoreActiveElement = function restoreActiveElement() {
+  var x = window.scrollX;
+  var y = window.scrollY;
+  globalState.restoreFocusTimeout = setTimeout(function () {
+    if (globalState.previousActiveElement && globalState.previousActiveElement.focus) {
+      globalState.previousActiveElement.focus();
+      globalState.previousActiveElement = null;
+    }
+  }, 100); // issues/900
+  if (typeof x !== 'undefined' && typeof y !== 'undefined') {
+    // IE doesn't have scrollX/scrollY support
+    window.scrollTo(x, y);
+  }
+};
+
+/*
+ * Global function to close sweetAlert
+ */
+var close = function close(onClose, onAfterClose) {
+  var container = getContainer();
+  var popup = getPopup();
+  if (!popup) {
+    return;
+  }
+
+  if (onClose !== null && typeof onClose === 'function') {
+    onClose(popup);
+  }
+
+  removeClass(popup, swalClasses.show);
+  addClass(popup, swalClasses.hide);
+
+  var removePopupAndResetState = function removePopupAndResetState() {
+    if (!isToast()) {
+      restoreActiveElement();
+      globalState.keydownTarget.removeEventListener('keydown', globalState.keydownHandler, { capture: globalState.keydownListenerCapture });
+      globalState.keydownHandlerAdded = false;
+    }
+
+    if (container.parentNode) {
+      container.parentNode.removeChild(container);
+    }
+    removeClass([document.documentElement, document.body], [swalClasses.shown, swalClasses['height-auto'], swalClasses['no-backdrop'], swalClasses['has-input'], swalClasses['toast-shown']]);
+
+    if (isModal()) {
+      undoScrollbar();
+      undoIOSfix();
+    }
+
+    if (onAfterClose !== null && typeof onAfterClose === 'function') {
+      setTimeout(function () {
+        onAfterClose();
+      });
+    }
+  };
+
+  // If animation is supported, animate
+  if (animationEndEvent && !hasClass(popup, swalClasses.noanimation)) {
+    popup.addEventListener(animationEndEvent, function swalCloseEventFinished() {
+      popup.removeEventListener(animationEndEvent, swalCloseEventFinished);
+      if (hasClass(popup, swalClasses.hide)) {
+        removePopupAndResetState();
+      }
+    });
+  } else {
+    // Otherwise, remove immediately
+    removePopupAndResetState();
+  }
+};
+
+/*
+ * Global function to determine if swal2 popup is shown
+ */
+var isVisible$1 = function isVisible() {
+  return !!getPopup();
+};
+
+/*
+ * Global function to click 'Confirm' button
+ */
+var clickConfirm = function clickConfirm() {
+  return getConfirmButton().click();
+};
+
+/*
+ * Global function to click 'Cancel' button
+ */
+var clickCancel = function clickCancel() {
+  return getCancelButton().click();
+};
+
+function fire() {
+  var Swal = this;
+
+  for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+    args[_key] = arguments[_key];
+  }
+
+  return new (Function.prototype.bind.apply(Swal, [null].concat(args)))();
+}
+
+/**
+ * Extends a Swal class making it able to be instantiated without the `new` keyword (and thus without `Swal.fire`)
+ * @param ParentSwal
+ * @returns {NoNewKeywordSwal}
+ */
+function withNoNewKeyword(ParentSwal) {
+  var NoNewKeywordSwal = function NoNewKeywordSwal() {
+    for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+      args[_key] = arguments[_key];
+    }
+
+    if (!(this instanceof NoNewKeywordSwal)) {
+      return new (Function.prototype.bind.apply(NoNewKeywordSwal, [null].concat(args)))();
+    }
+    Object.getPrototypeOf(NoNewKeywordSwal).apply(this, args);
+  };
+  NoNewKeywordSwal.prototype = _extends(Object.create(ParentSwal.prototype), { constructor: NoNewKeywordSwal });
+
+  if (typeof Object.setPrototypeOf === 'function') {
+    Object.setPrototypeOf(NoNewKeywordSwal, ParentSwal);
+  } else {
+    // Android 4.4
+    // eslint-disable-next-line
+    NoNewKeywordSwal.__proto__ = ParentSwal;
+  }
+  return NoNewKeywordSwal;
+}
+
 var defaultParams = {
   title: '',
   titleText: '',
@@ -71667,9 +71955,12 @@ var defaultParams = {
   target: 'body',
   backdrop: true,
   animation: true,
+  heightAuto: true,
   allowOutsideClick: true,
   allowEscapeKey: true,
   allowEnterKey: true,
+  stopKeydownPropagation: true,
+  keydownListenerCapture: false,
   showConfirmButton: true,
   showCancelButton: false,
   preConfirm: null,
@@ -71752,86 +72043,57 @@ var showWarningsForParams = function showWarningsForParams(params) {
   }
 };
 
-var globalState = {
-  popupParams: _extends({}, defaultParams)
-};
+var deprecationWarning = '"setDefaults" & "resetDefaults" methods are deprecated in favor of "mixin" method and will be removed in the next major release. For new projects, use "mixin". For past projects already using "setDefaults", support will be provided through an additional package.';
+var defaults$1 = {};
 
-/*
- * Global function to close sweetAlert
- */
-var close = function close(onClose, onAfterClose) {
-  var container = getContainer();
-  var popup = getPopup();
-  if (!popup) {
-    return;
-  }
+function withGlobalDefaults(ParentSwal) {
+  var SwalWithGlobalDefaults = function (_ParentSwal) {
+    inherits(SwalWithGlobalDefaults, _ParentSwal);
 
-  if (onClose !== null && typeof onClose === 'function') {
-    onClose(popup);
-  }
-
-  removeClass(popup, swalClasses.show);
-  addClass(popup, swalClasses.hide);
-  clearTimeout(popup.timeout);
-
-  if (!isToast()) {
-    resetPrevState();
-    window.onkeydown = globalState.previousWindowKeyDown;
-    globalState.windowOnkeydownOverridden = false;
-  }
-
-  var removePopupAndResetState = function removePopupAndResetState() {
-    if (container.parentNode) {
-      container.parentNode.removeChild(container);
-    }
-    removeClass([document.documentElement, document.body], [swalClasses.shown, swalClasses['no-backdrop'], swalClasses['has-input'], swalClasses['toast-shown']]);
-
-    if (isModal()) {
-      undoScrollbar();
-      undoIOSfix();
+    function SwalWithGlobalDefaults() {
+      classCallCheck(this, SwalWithGlobalDefaults);
+      return possibleConstructorReturn(this, (SwalWithGlobalDefaults.__proto__ || Object.getPrototypeOf(SwalWithGlobalDefaults)).apply(this, arguments));
     }
 
-    if (onAfterClose !== null && typeof onAfterClose === 'function') {
-      setTimeout(function () {
-        onAfterClose();
-      });
-    }
-  };
-
-  // If animation is supported, animate
-  if (animationEndEvent && !hasClass(popup, swalClasses.noanimation)) {
-    popup.addEventListener(animationEndEvent, function swalCloseEventFinished() {
-      popup.removeEventListener(animationEndEvent, swalCloseEventFinished);
-      if (hasClass(popup, swalClasses.hide)) {
-        removePopupAndResetState();
+    createClass(SwalWithGlobalDefaults, [{
+      key: '_main',
+      value: function _main(params) {
+        return get(SwalWithGlobalDefaults.prototype.__proto__ || Object.getPrototypeOf(SwalWithGlobalDefaults.prototype), '_main', this).call(this, _extends({}, defaults$1, params));
       }
-    });
-  } else {
-    // Otherwise, remove immediately
-    removePopupAndResetState();
+    }], [{
+      key: 'setDefaults',
+      value: function setDefaults(params) {
+        warnOnce(deprecationWarning);
+        if (!params || (typeof params === 'undefined' ? 'undefined' : _typeof(params)) !== 'object') {
+          throw new TypeError('SweetAlert2: The argument for setDefaults() is required and has to be a object');
+        }
+        showWarningsForParams(params);
+        // assign valid params from `params` to `defaults`
+        Object.keys(params).forEach(function (param) {
+          if (ParentSwal.isValidParameter(param)) {
+            defaults$1[param] = params[param];
+          }
+        });
+      }
+    }, {
+      key: 'resetDefaults',
+      value: function resetDefaults() {
+        warnOnce(deprecationWarning);
+        defaults$1 = {};
+      }
+    }]);
+    return SwalWithGlobalDefaults;
+  }(ParentSwal);
+
+  // Set default params if `window._swalDefaults` is an object
+
+
+  if (typeof window !== 'undefined' && _typeof(window._swalDefaults) === 'object') {
+    SwalWithGlobalDefaults.setDefaults(window._swalDefaults);
   }
-};
 
-/*
- * Global function to determine if swal2 popup is shown
- */
-var isVisible$1 = function isVisible() {
-  return !!getPopup();
-};
-
-/*
- * Global function to click 'Confirm' button
- */
-var clickConfirm = function clickConfirm() {
-  return getConfirmButton().click();
-};
-
-/*
- * Global function to click 'Cancel' button
- */
-var clickCancel = function clickCancel() {
-  return getCancelButton().click();
-};
+  return SwalWithGlobalDefaults;
+}
 
 /**
  * Returns an extended version of `Swal` containing `params` as defaults.
@@ -71846,14 +72108,14 @@ var clickCancel = function clickCancel() {
  *
  * After:
  * const TextPrompt = Swal.mixin({ input: 'text', showCancelButton: true })
- * const {value: firstName} = await TextPrompt.fire('What is your first name?')
- * const {value: lastName} = await TextPrompt.fire('What is your last name?')
+ * const {value: firstName} = await TextPrompt('What is your first name?')
+ * const {value: lastName} = await TextPrompt('What is your last name?')
  *
- * @param params
+ * @param mixinParams
  */
 function mixin(mixinParams) {
   var Swal = this;
-  return function (_Swal) {
+  return withNoNewKeyword(function (_Swal) {
     inherits(MixinSwal, _Swal);
 
     function MixinSwal() {
@@ -71862,13 +72124,13 @@ function mixin(mixinParams) {
     }
 
     createClass(MixinSwal, [{
-      key: "_main",
+      key: '_main',
       value: function _main(params) {
-        return get(MixinSwal.prototype.__proto__ || Object.getPrototypeOf(MixinSwal.prototype), "_main", this).call(this, _extends({}, mixinParams, params));
+        return get(MixinSwal.prototype.__proto__ || Object.getPrototypeOf(MixinSwal.prototype), '_main', this).call(this, _extends({}, mixinParams, params));
       }
     }]);
     return MixinSwal;
-  }(Swal);
+  }(Swal));
 }
 
 // private global state for the queue feature
@@ -71934,38 +72196,12 @@ var deleteQueueStep = function deleteQueueStep(index) {
 };
 
 /**
- * Set default params for each popup
- * @param {Object} userParams
- */
-var setDefaults = function setDefaults(userParams) {
-  if (!userParams || (typeof userParams === 'undefined' ? 'undefined' : _typeof(userParams)) !== 'object') {
-    return error('the argument for setDefaults() is required and has to be a object');
-  }
-
-  showWarningsForParams(userParams);
-
-  // assign valid params from userParams to popupParams
-  for (var param in userParams) {
-    if (isValidParameter(param)) {
-      globalState.popupParams[param] = userParams[param];
-    }
-  }
-};
-
-/**
- * Reset default params for each popup
- */
-var resetDefaults = function resetDefaults() {
-  globalState.popupParams = _extends({}, defaultParams);
-};
-
-/**
  * Show spinner instead of Confirm button and disable Cancel button
  */
 var showLoading = function showLoading() {
   var popup = getPopup();
   if (!popup) {
-    SweetAlert('');
+    Swal('');
   }
   popup = getPopup();
   var actions = getActions();
@@ -71983,15 +72219,12 @@ var showLoading = function showLoading() {
   popup.focus();
 };
 
-function fire() {
-  var Swal = this;
-
-  for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
-    args[_key] = arguments[_key];
-  }
-
-  return new (Function.prototype.bind.apply(Swal, [null].concat(args)))();
-}
+/**
+ * Show spinner instead of Confirm button and disable Cancel button
+ */
+var getTimerLeft = function getTimerLeft() {
+  return globalState.timeout && globalState.timeout.getTimerLeft();
+};
 
 
 
@@ -72007,6 +72240,7 @@ var staticMethods = Object.freeze({
 	isVisible: isVisible$1,
 	clickConfirm: clickConfirm,
 	clickCancel: clickCancel,
+	getPopup: getPopup,
 	getTitle: getTitle,
 	getContent: getContent,
 	getImage: getImage,
@@ -72016,26 +72250,78 @@ var staticMethods = Object.freeze({
 	getCancelButton: getCancelButton,
 	getFooter: getFooter,
 	isLoading: isLoading,
+	fire: fire,
 	mixin: mixin,
 	queue: queue,
 	getQueueStep: getQueueStep,
 	insertQueueStep: insertQueueStep,
 	deleteQueueStep: deleteQueueStep,
-	setDefaults: setDefaults,
-	resetDefaults: resetDefaults,
 	showLoading: showLoading,
 	enableLoading: showLoading,
-	fire: fire
+	getTimerLeft: getTimerLeft
 });
+
+// https://github.com/Riim/symbol-polyfill/blob/master/index.js
+
+var _Symbol = typeof Symbol === 'function' ? Symbol : function () {
+  var idCounter = 0;
+  function _Symbol(key) {
+    return '__' + key + '_' + Math.floor(Math.random() * 1e9) + '_' + ++idCounter + '__';
+  }
+  _Symbol.iterator = _Symbol('Symbol.iterator');
+  return _Symbol;
+}();
+
+// WeakMap polyfill, needed for Android 4.4
+// Related issue: https://github.com/sweetalert2/sweetalert2/issues/1071
+// http://webreflection.blogspot.fi/2015/04/a-weakmap-polyfill-in-20-lines-of-code.html
+
+var WeakMap$1 = typeof WeakMap === 'function' ? WeakMap : function (s, dP, hOP) {
+  function WeakMap() {
+    dP(this, s, { value: _Symbol('WeakMap') });
+  }
+  WeakMap.prototype = {
+    'delete': function del(o) {
+      delete o[this[s]];
+    },
+    get: function get(o) {
+      return o[this[s]];
+    },
+    has: function has(o) {
+      return hOP.call(o, this[s]);
+    },
+    set: function set(o, v) {
+      dP(o, this[s], { configurable: true, value: v });
+    }
+  };
+  return WeakMap;
+}(_Symbol('WeakMap'), Object.defineProperty, {}.hasOwnProperty);
+
+/**
+ * This module containts `WeakMap`s for each effectively-"private  property" that a `swal` has.
+ * For example, to set the private property "foo" of `this` to "bar", you can `privateProps.foo.set(this, 'bar')`
+ * This is the approach that Babel will probably take to implement private methods/fields
+ *   https://github.com/tc39/proposal-private-methods
+ *   https://github.com/babel/babel/pull/7555
+ * Once we have the changes from that PR in Babel, and our core class fits reasonable in *one module*
+ *   then we can use that language feature.
+ */
+
+var privateProps = {
+  promise: new WeakMap$1(),
+  innerParams: new WeakMap$1(),
+  domCache: new WeakMap$1()
+};
 
 /**
  * Show spinner instead of Confirm button and disable Cancel button
  */
 function hideLoading() {
-  var domCache = this._domCache;
-  if (!this.params.showConfirmButton) {
+  var innerParams = privateProps.innerParams.get(this);
+  var domCache = privateProps.domCache.get(this);
+  if (!innerParams.showConfirmButton) {
     hide(domCache.confirmButton);
-    if (!this.params.showCancelButton) {
+    if (!innerParams.showCancelButton) {
       hide(domCache.actions);
     }
   }
@@ -72048,8 +72334,9 @@ function hideLoading() {
 
 // Get input element by specified type or, if type isn't specified, by params.input
 function getInput(inputType) {
-  var domCache = this._domCache;
-  inputType = inputType || this.params.input;
+  var innerParams = privateProps.innerParams.get(this);
+  var domCache = privateProps.domCache.get(this);
+  inputType = inputType || innerParams.input;
   if (!inputType) {
     return null;
   }
@@ -72070,21 +72357,25 @@ function getInput(inputType) {
 }
 
 function enableButtons() {
-  this._domCache.confirmButton.disabled = false;
-  this._domCache.cancelButton.disabled = false;
+  var domCache = privateProps.domCache.get(this);
+  domCache.confirmButton.disabled = false;
+  domCache.cancelButton.disabled = false;
 }
 
 function disableButtons() {
-  this._domCache.confirmButton.disabled = true;
-  this._domCache.cancelButton.disabled = true;
+  var domCache = privateProps.domCache.get(this);
+  domCache.confirmButton.disabled = true;
+  domCache.cancelButton.disabled = true;
 }
 
 function enableConfirmButton() {
-  this._domCache.confirmButton.disabled = false;
+  var domCache = privateProps.domCache.get(this);
+  domCache.confirmButton.disabled = false;
 }
 
 function disableConfirmButton() {
-  this._domCache.confirmButton.disabled = true;
+  var domCache = privateProps.domCache.get(this);
+  domCache.confirmButton.disabled = true;
 }
 
 function enableInput() {
@@ -72121,7 +72412,7 @@ function disableInput() {
 
 // Show block with validation error
 function showValidationError(error) {
-  var domCache = this._domCache;
+  var domCache = privateProps.domCache.get(this);
   domCache.validationError.innerHTML = error;
   var popupComputedStyle = window.getComputedStyle(domCache.popup);
   domCache.validationError.style.marginLeft = '-' + popupComputedStyle.getPropertyValue('padding-left');
@@ -72139,7 +72430,7 @@ function showValidationError(error) {
 
 // Hide block with validation error
 function resetValidationError() {
-  var domCache = this._domCache;
+  var domCache = privateProps.domCache.get(this);
   if (domCache.validationError) {
     hide(domCache.validationError);
   }
@@ -72152,14 +72443,42 @@ function resetValidationError() {
   }
 }
 
+var Timer = function Timer(callback, delay) {
+  classCallCheck(this, Timer);
+
+  var id, started, running;
+  var remaining = delay;
+  this.start = function () {
+    running = true;
+    started = new Date();
+    id = setTimeout(callback, remaining);
+  };
+  this.stop = function () {
+    running = false;
+    clearTimeout(id);
+    remaining -= new Date() - started;
+  };
+  this.getTimerLeft = function () {
+    if (running) {
+      this.stop();
+      this.start();
+    }
+    return remaining;
+  };
+  this.getStateRunning = function () {
+    return running;
+  };
+  this.start();
+};
+
 var defaultInputValidators = {
-  email: function email(string) {
-    return (/^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9-]{2,24}$/.test(string) ? Promise.resolve() : Promise.reject('Invalid email address')
+  email: function email(string, extraParams) {
+    return (/^[a-zA-Z0-9.+_-]+@[a-zA-Z0-9.-]+\.[a-zA-Z0-9-]{2,24}$/.test(string) ? Promise.resolve() : Promise.reject(extraParams && extraParams.validationMessage ? extraParams.validationMessage : 'Invalid email address')
     );
   },
-  url: function url(string) {
+  url: function url(string, extraParams) {
     // taken from https://stackoverflow.com/a/3809435/1331425
-    return (/^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)$/.test(string) ? Promise.resolve() : Promise.reject('Invalid URL')
+    return (/^https?:\/\/(www\.)?[-a-zA-Z0-9@:%._+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_+.~#?&//=]*)$/.test(string) ? Promise.resolve() : Promise.reject(extraParams && extraParams.validationMessage ? extraParams.validationMessage : 'Invalid URL')
     );
   }
 };
@@ -72175,7 +72494,7 @@ function setParameters(params) {
   if (!params.inputValidator) {
     Object.keys(defaultInputValidators).forEach(function (key) {
       if (params.input === key) {
-        params.inputValidator = params.expectRejections ? defaultInputValidators[key] : SweetAlert.adaptInputValidator(defaultInputValidators[key]);
+        params.inputValidator = params.expectRejections ? defaultInputValidators[key] : Swal.adaptInputValidator(defaultInputValidators[key]);
       }
     });
   }
@@ -72295,7 +72614,7 @@ function setParameters(params) {
 
   // Progress steps
   var progressStepsContainer = getProgressSteps();
-  var currentProgressStep = parseInt(params.currentProgressStep === null ? SweetAlert.getQueueStep() : params.currentProgressStep, 10);
+  var currentProgressStep = parseInt(params.currentProgressStep === null ? Swal.getQueueStep() : params.currentProgressStep, 10);
   if (params.progressSteps && params.progressSteps.length) {
     show(progressStepsContainer);
     empty(progressStepsContainer);
@@ -72451,21 +72770,19 @@ function setParameters(params) {
 }
 
 /**
- * Animations
+ * Open popup, add necessary classes and styles, fix scrollbar
  *
- * @param animation
- * @param onBeforeOpen
- * @param onComplete
+ * @param {Array} params
  */
-var openPopup = function openPopup(animation, onBeforeOpen, onOpen) {
+var openPopup = function openPopup(params) {
   var container = getContainer();
   var popup = getPopup();
 
-  if (onBeforeOpen !== null && typeof onBeforeOpen === 'function') {
-    onBeforeOpen(popup);
+  if (params.onBeforeOpen !== null && typeof params.onBeforeOpen === 'function') {
+    params.onBeforeOpen(popup);
   }
 
-  if (animation) {
+  if (params.animation) {
     addClass(popup, swalClasses.show);
     addClass(container, swalClasses.fade);
     removeClass(popup, swalClasses.hide);
@@ -72486,14 +72803,20 @@ var openPopup = function openPopup(animation, onBeforeOpen, onOpen) {
   }
 
   addClass([document.documentElement, document.body, container], swalClasses.shown);
+  if (params.heightAuto && params.backdrop && !params.toast) {
+    addClass([document.documentElement, document.body], swalClasses['height-auto']);
+  }
+
   if (isModal()) {
     fixScrollbar();
     iOSfix();
   }
-  states.previousActiveElement = document.activeElement;
-  if (onOpen !== null && typeof onOpen === 'function') {
+  if (!globalState.previousActiveElement) {
+    globalState.previousActiveElement = document.activeElement;
+  }
+  if (params.onOpen !== null && typeof params.onOpen === 'function') {
     setTimeout(function () {
-      onOpen(popup);
+      params.onOpen(popup);
     });
   }
 };
@@ -72503,11 +72826,21 @@ function _main(userParams) {
 
   showWarningsForParams(userParams);
 
-  var params = this.params = _extends({}, globalState.popupParams, userParams);
-  setParameters(params);
-  Object.freeze(params);
+  var innerParams = _extends({}, defaultParams, userParams);
+  setParameters(innerParams);
+  Object.freeze(innerParams);
+  privateProps.innerParams.set(this, innerParams);
 
-  var domCache = this._domCache = {
+  // clear the previous timer
+  if (globalState.timeout) {
+    globalState.timeout.stop();
+    delete globalState.timeout;
+  }
+
+  // clear the restore focus timeout
+  clearTimeout(globalState.restoreFocusTimeout);
+
+  var domCache = {
     popup: getPopup(),
     container: getContainer(),
     content: getContent(),
@@ -72518,37 +72851,39 @@ function _main(userParams) {
     validationError: getValidationError(),
     progressSteps: getProgressSteps()
   };
+  privateProps.domCache.set(this, domCache);
 
   var constructor = this.constructor;
 
   return new Promise(function (resolve, reject) {
     // functions to handle all resolving/rejecting/settling
     var succeedWith = function succeedWith(value) {
-      constructor.closePopup(params.onClose, params.onAfterClose); // TODO: make closePopup an *instance* method
-      if (params.useRejections) {
+      constructor.closePopup(innerParams.onClose, innerParams.onAfterClose); // TODO: make closePopup an *instance* method
+      if (innerParams.useRejections) {
         resolve(value);
       } else {
         resolve({ value: value });
       }
     };
     var dismissWith = function dismissWith(dismiss) {
-      constructor.closePopup(params.onClose, params.onAfterClose);
-      if (params.useRejections) {
+      constructor.closePopup(innerParams.onClose, innerParams.onAfterClose);
+      if (innerParams.useRejections) {
         reject(dismiss);
       } else {
         resolve({ dismiss: dismiss });
       }
     };
     var errorWith = function errorWith(error$$1) {
-      constructor.closePopup(params.onClose, params.onAfterClose);
+      constructor.closePopup(innerParams.onClose, innerParams.onAfterClose);
       reject(error$$1);
     };
 
     // Close on timer
-    if (params.timer) {
-      domCache.popup.timeout = setTimeout(function () {
-        return dismissWith('timer');
-      }, params.timer);
+    if (innerParams.timer) {
+      globalState.timeout = new Timer(function () {
+        dismissWith('timer');
+        delete globalState.timeout;
+      }, innerParams.timer);
     }
 
     // Get the value of the popup input
@@ -72557,7 +72892,7 @@ function _main(userParams) {
       if (!input) {
         return null;
       }
-      switch (params.input) {
+      switch (innerParams.input) {
         case 'checkbox':
           return input.checked ? 1 : 0;
         case 'radio':
@@ -72565,12 +72900,12 @@ function _main(userParams) {
         case 'file':
           return input.files.length ? input.files[0] : null;
         default:
-          return params.inputAutoTrim ? input.value.trim() : input.value;
+          return innerParams.inputAutoTrim ? input.value.trim() : input.value;
       }
     };
 
     // input autofocus
-    if (params.input) {
+    if (innerParams.input) {
       setTimeout(function () {
         var input = _this.getInput();
         if (input) {
@@ -72580,16 +72915,16 @@ function _main(userParams) {
     }
 
     var confirm = function confirm(value) {
-      if (params.showLoaderOnConfirm) {
+      if (innerParams.showLoaderOnConfirm) {
         constructor.showLoading(); // TODO: make showLoading an *instance* method
       }
 
-      if (params.preConfirm) {
+      if (innerParams.preConfirm) {
         _this.resetValidationError();
         var preConfirmPromise = Promise.resolve().then(function () {
-          return params.preConfirm(value, params.extraParams);
+          return innerParams.preConfirm(value, innerParams.extraParams);
         });
-        if (params.expectRejections) {
+        if (innerParams.expectRejections) {
           preConfirmPromise.then(function (preConfirmValue) {
             return succeedWith(preConfirmValue || value);
           }, function (validationError) {
@@ -72629,15 +72964,15 @@ function _main(userParams) {
           // Clicked 'confirm'
           if (targetedConfirm && constructor.isVisible()) {
             _this.disableButtons();
-            if (params.input) {
+            if (innerParams.input) {
               var inputValue = getInputValue();
 
-              if (params.inputValidator) {
+              if (innerParams.inputValidator) {
                 _this.disableInput();
                 var validationPromise = Promise.resolve().then(function () {
-                  return params.inputValidator(inputValue, params.extraParams);
+                  return innerParams.inputValidator(inputValue, innerParams.extraParams);
                 });
-                if (params.expectRejections) {
+                if (innerParams.expectRejections) {
                   validationPromise.then(function () {
                     _this.enableButtons();
                     _this.enableInput();
@@ -72692,13 +73027,13 @@ function _main(userParams) {
       dismissWith(constructor.DismissReason.close);
     };
 
-    if (params.toast) {
+    if (innerParams.toast) {
       // Closing popup by internal click
       domCache.popup.onclick = function (e) {
-        if (params.showConfirmButton || params.showCancelButton || params.showCloseButton || params.input) {
+        if (innerParams.showConfirmButton || innerParams.showCancelButton || innerParams.showCloseButton || innerParams.input) {
           return;
         }
-        constructor.closePopup(params.onClose, params.onAfterClose);
+        constructor.closePopup(innerParams.onClose, innerParams.onAfterClose);
         dismissWith(constructor.DismissReason.close);
       };
     } else {
@@ -72736,14 +73071,14 @@ function _main(userParams) {
         if (e.target !== domCache.container) {
           return;
         }
-        if (callIfFunction(params.allowOutsideClick)) {
+        if (callIfFunction(innerParams.allowOutsideClick)) {
           dismissWith(constructor.DismissReason.backdrop);
         }
       };
     }
 
     // Reverse buttons (Confirm on the right side)
-    if (params.reverseButtons) {
+    if (innerParams.reverseButtons) {
       domCache.confirmButton.parentNode.insertBefore(domCache.cancelButton, domCache.confirmButton);
     } else {
       domCache.confirmButton.parentNode.insertBefore(domCache.confirmButton, domCache.cancelButton);
@@ -72751,7 +73086,7 @@ function _main(userParams) {
 
     // Focus handling
     var setFocus = function setFocus(index, increment) {
-      var focusableElements = getFocusableElements(params.focusCancel);
+      var focusableElements = getFocusableElements(innerParams.focusCancel);
       // search for visible elements and select the next possible match
       for (var _i = 0; _i < focusableElements.length; _i++) {
         index = index + increment;
@@ -72771,17 +73106,21 @@ function _main(userParams) {
           return el.focus();
         }
       }
+      // no visible focusable elements, focus the popup
+      domCache.popup.focus();
     };
 
-    var handleKeyDown = function handleKeyDown(event) {
-      var e = event || window.event;
+    var keydownHandler = function keydownHandler(e, innerParams) {
+      if (innerParams.stopKeydownPropagation) {
+        e.stopPropagation();
+      }
 
       var arrowKeys = ['ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Left', 'Right', 'Up', 'Down' // IE11
       ];
 
       if (e.key === 'Enter' && !e.isComposing) {
-        if (e.target === _this.getInput()) {
-          if (['textarea', 'file'].indexOf(params.input) !== -1) {
+        if (e.target && _this.getInput() && e.target.outerHTML === _this.getInput().outerHTML) {
+          if (['textarea', 'file'].indexOf(innerParams.input) !== -1) {
             return; // do not submit
           }
 
@@ -72793,7 +73132,7 @@ function _main(userParams) {
       } else if (e.key === 'Tab') {
         var targetElement = e.target || e.srcElement;
 
-        var focusableElements = getFocusableElements(params.focusCancel);
+        var focusableElements = getFocusableElements(innerParams.focusCancel);
         var btnIndex = -1; // Find the button - note, this is a nodelist, not an array.
         for (var _i2 = 0; _i2 < focusableElements.length; _i2++) {
           if (targetElement === focusableElements[_i2]) {
@@ -72823,27 +73162,31 @@ function _main(userParams) {
         }
 
         // ESC
-      } else if ((e.key === 'Escape' || e.key === 'Esc') && callIfFunction(params.allowEscapeKey) === true) {
+      } else if ((e.key === 'Escape' || e.key === 'Esc') && callIfFunction(innerParams.allowEscapeKey) === true) {
         dismissWith(constructor.DismissReason.esc);
       }
     };
 
-    if (params.toast && globalState.windowOnkeydownOverridden) {
-      window.onkeydown = globalState.previousWindowKeyDown;
-      globalState.windowOnkeydownOverridden = false;
+    if (globalState.keydownHandlerAdded) {
+      globalState.keydownTarget.removeEventListener('keydown', globalState.keydownHandler, { capture: globalState.keydownListenerCapture });
+      globalState.keydownHandlerAdded = false;
     }
 
-    if (!params.toast && !globalState.windowOnkeydownOverridden) {
-      globalState.previousWindowKeyDown = window.onkeydown;
-      globalState.windowOnkeydownOverridden = true;
-      window.onkeydown = handleKeyDown;
+    if (!innerParams.toast) {
+      globalState.keydownHandler = function (e) {
+        return keydownHandler(e, innerParams);
+      };
+      globalState.keydownTarget = innerParams.keydownListenerCapture ? window : domCache.popup;
+      globalState.keydownListenerCapture = innerParams.keydownListenerCapture;
+      globalState.keydownTarget.addEventListener('keydown', globalState.keydownHandler, { capture: globalState.keydownListenerCapture });
+      globalState.keydownHandlerAdded = true;
     }
 
     _this.enableButtons();
     _this.hideLoading();
     _this.resetValidationError();
 
-    if (params.input) {
+    if (innerParams.input) {
       addClass(document.body, swalClasses['has-input']);
     }
 
@@ -72865,22 +73208,22 @@ function _main(userParams) {
             }
           }
         }
-        for (var attr in params.inputAttributes) {
-          input.setAttribute(attr, params.inputAttributes[attr]);
+        for (var attr in innerParams.inputAttributes) {
+          input.setAttribute(attr, innerParams.inputAttributes[attr]);
         }
       }
 
       // set class
       inputContainer.className = inputClass;
-      if (params.inputClass) {
-        addClass(inputContainer, params.inputClass);
+      if (innerParams.inputClass) {
+        addClass(inputContainer, innerParams.inputClass);
       }
 
       hide(inputContainer);
     }
 
     var populateInputOptions = void 0;
-    switch (params.input) {
+    switch (innerParams.input) {
       case 'text':
       case 'email':
       case 'password':
@@ -72888,32 +73231,32 @@ function _main(userParams) {
       case 'tel':
       case 'url':
         input = getChildByClass(domCache.content, swalClasses.input);
-        input.value = params.inputValue;
-        input.placeholder = params.inputPlaceholder;
-        input.type = params.input;
+        input.value = innerParams.inputValue;
+        input.placeholder = innerParams.inputPlaceholder;
+        input.type = innerParams.input;
         show(input);
         break;
       case 'file':
         input = getChildByClass(domCache.content, swalClasses.file);
-        input.placeholder = params.inputPlaceholder;
-        input.type = params.input;
+        input.placeholder = innerParams.inputPlaceholder;
+        input.type = innerParams.input;
         show(input);
         break;
       case 'range':
         var range = getChildByClass(domCache.content, swalClasses.range);
         var rangeInput = range.querySelector('input');
         var rangeOutput = range.querySelector('output');
-        rangeInput.value = params.inputValue;
-        rangeInput.type = params.input;
-        rangeOutput.value = params.inputValue;
+        rangeInput.value = innerParams.inputValue;
+        rangeInput.type = innerParams.input;
+        rangeOutput.value = innerParams.inputValue;
         show(range);
         break;
       case 'select':
         var select = getChildByClass(domCache.content, swalClasses.select);
         select.innerHTML = '';
-        if (params.inputPlaceholder) {
+        if (innerParams.inputPlaceholder) {
           var placeholder = document.createElement('option');
-          placeholder.innerHTML = params.inputPlaceholder;
+          placeholder.innerHTML = innerParams.inputPlaceholder;
           placeholder.value = '';
           placeholder.disabled = true;
           placeholder.selected = true;
@@ -72928,7 +73271,7 @@ function _main(userParams) {
             var option = document.createElement('option');
             option.value = optionValue;
             option.innerHTML = optionLabel;
-            if (params.inputValue.toString() === optionValue.toString()) {
+            if (innerParams.inputValue.toString() === optionValue.toString()) {
               option.selected = true;
             }
             select.appendChild(option);
@@ -72951,7 +73294,7 @@ function _main(userParams) {
             radioInput.type = 'radio';
             radioInput.name = swalClasses.radio;
             radioInput.value = radioValue;
-            if (params.inputValue.toString() === radioValue.toString()) {
+            if (innerParams.inputValue.toString() === radioValue.toString()) {
               radioInput.checked = true;
             }
             radioLabelElement.innerHTML = radioLabel;
@@ -72971,49 +73314,49 @@ function _main(userParams) {
         checkboxInput.type = 'checkbox';
         checkboxInput.value = 1;
         checkboxInput.id = swalClasses.checkbox;
-        checkboxInput.checked = Boolean(params.inputValue);
+        checkboxInput.checked = Boolean(innerParams.inputValue);
         var label = checkbox.getElementsByTagName('span');
         if (label.length) {
           checkbox.removeChild(label[0]);
         }
         label = document.createElement('span');
-        label.innerHTML = params.inputPlaceholder;
+        label.innerHTML = innerParams.inputPlaceholder;
         checkbox.appendChild(label);
         show(checkbox);
         break;
       case 'textarea':
         var textarea = getChildByClass(domCache.content, swalClasses.textarea);
-        textarea.value = params.inputValue;
-        textarea.placeholder = params.inputPlaceholder;
+        textarea.value = innerParams.inputValue;
+        textarea.placeholder = innerParams.inputPlaceholder;
         show(textarea);
         break;
       case null:
         break;
       default:
-        error('Unexpected type of input! Expected "text", "email", "password", "number", "tel", "select", "radio", "checkbox", "textarea", "file" or "url", got "' + params.input + '"');
+        error('Unexpected type of input! Expected "text", "email", "password", "number", "tel", "select", "radio", "checkbox", "textarea", "file" or "url", got "' + innerParams.input + '"');
         break;
     }
 
-    if (params.input === 'select' || params.input === 'radio') {
+    if (innerParams.input === 'select' || innerParams.input === 'radio') {
       var processInputOptions = function processInputOptions(inputOptions) {
         return populateInputOptions(formatInputOptions(inputOptions));
       };
-      if (isThenable(params.inputOptions)) {
+      if (isThenable(innerParams.inputOptions)) {
         constructor.showLoading();
-        params.inputOptions.then(function (inputOptions) {
+        innerParams.inputOptions.then(function (inputOptions) {
           _this.hideLoading();
           processInputOptions(inputOptions);
         });
-      } else if (_typeof(params.inputOptions) === 'object') {
-        processInputOptions(params.inputOptions);
+      } else if (_typeof(innerParams.inputOptions) === 'object') {
+        processInputOptions(innerParams.inputOptions);
       } else {
-        error('Unexpected type of inputOptions! Expected object, Map or Promise, got ' + _typeof(params.inputOptions));
+        error('Unexpected type of inputOptions! Expected object, Map or Promise, got ' + _typeof(innerParams.inputOptions));
       }
-    } else if (['text', 'email', 'number', 'tel', 'textarea'].indexOf(params.input) !== -1 && isThenable(params.inputValue)) {
+    } else if (['text', 'email', 'number', 'tel', 'textarea'].indexOf(innerParams.input) !== -1 && isThenable(innerParams.inputValue)) {
       constructor.showLoading();
       hide(input);
-      params.inputValue.then(function (inputValue) {
-        input.value = params.input === 'number' ? parseFloat(inputValue) || 0 : inputValue + '';
+      innerParams.inputValue.then(function (inputValue) {
+        input.value = innerParams.input === 'number' ? parseFloat(inputValue) || 0 : inputValue + '';
         show(input);
         _this.hideLoading();
       }).catch(function (err) {
@@ -73024,16 +73367,16 @@ function _main(userParams) {
       });
     }
 
-    openPopup(params.animation, params.onBeforeOpen, params.onOpen);
+    openPopup(innerParams);
 
-    if (!params.toast) {
-      if (!callIfFunction(params.allowEnterKey)) {
+    if (!innerParams.toast) {
+      if (!callIfFunction(innerParams.allowEnterKey)) {
         if (document.activeElement) {
           document.activeElement.blur();
         }
-      } else if (params.focusCancel && isVisible(domCache.cancelButton)) {
+      } else if (innerParams.focusCancel && isVisible(domCache.cancelButton)) {
         domCache.cancelButton.focus();
-      } else if (params.focusConfirm && isVisible(domCache.confirmButton)) {
+      } else if (innerParams.focusConfirm && isVisible(domCache.confirmButton)) {
         domCache.confirmButton.focus();
       } else {
         setFocus(-1, 1);
@@ -73085,25 +73428,34 @@ function SweetAlert() {
     return false;
   }
 
-  // handle things when constructor is invoked without the `new` keyword
-  if (!(this instanceof SweetAlert)) {
-    return new (Function.prototype.bind.apply(SweetAlert, [null].concat(args)))();
-  }
-
   currentInstance = this;
 
-  this._promise = this._main(this.constructor.argsToParams(args));
+  var outerParams = Object.freeze(this.constructor.argsToParams(args));
+
+  Object.defineProperties(this, {
+    params: {
+      value: outerParams,
+      writable: false,
+      enumerable: true
+    }
+  });
+
+  var promise = this._main(this.params);
+  privateProps.promise.set(this, promise);
 }
 
 // `catch` cannot be the name of a module export, so we define our thenable methods here instead
 SweetAlert.prototype.then = function (onFulfilled, onRejected) {
-  return this._promise.then(onFulfilled, onRejected);
+  var promise = privateProps.promise.get(this);
+  return promise.then(onFulfilled, onRejected);
 };
 SweetAlert.prototype.catch = function (onRejected) {
-  return this._promise.catch(onRejected);
+  var promise = privateProps.promise.get(this);
+  return promise.catch(onRejected);
 };
 SweetAlert.prototype.finally = function (onFinally) {
-  return this._promise.finally(onFinally);
+  var promise = privateProps.promise.get(this);
+  return promise.finally(onFinally);
 };
 
 // Assign instance methods from src/instanceMethods/*.js to prototype
@@ -73129,16 +73481,10 @@ SweetAlert.noop = function () {};
 
 SweetAlert.version = version;
 
-SweetAlert.default = SweetAlert;
+var Swal = withNoNewKeyword(withGlobalDefaults(SweetAlert));
+Swal.default = Swal;
 
-/**
- * Set default params if `window._swalDefaults` is an object
- */
-if (typeof window !== 'undefined' && _typeof(window._swalDefaults) === 'object') {
-  SweetAlert.setDefaults(window._swalDefaults);
-}
-
-return SweetAlert;
+return Swal;
 
 })));
 if (typeof window !== 'undefined' && window.Sweetalert2){  window.swal = window.sweetAlert = window.Swal = window.SweetAlert = window.Sweetalert2}
@@ -73675,10 +74021,11 @@ if (typeof window !== 'undefined' && window.Sweetalert2){  window.swal = window.
 "    right: .1875em;\n" +
 "    width: 1.375em; } }\n" +
 "\n" +
-"html.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown),\n" +
 "body.swal2-shown:not(.swal2-no-backdrop):not(.swal2-toast-shown) {\n" +
-"  height: auto;\n" +
 "  overflow-y: hidden; }\n" +
+"\n" +
+"body.swal2-height-auto {\n" +
+"  height: auto !important; }\n" +
 "\n" +
 "body.swal2-no-backdrop .swal2-shown {\n" +
 "  top: auto;\n" +
@@ -73917,9 +74264,7 @@ if (typeof window !== 'undefined' && window.Sweetalert2){  window.swal = window.
 "    right: 0;\n" +
 "    justify-content: center;\n" +
 "    width: 1.2em;\n" +
-"    min-width: 1.2em;\n" +
 "    height: 1.2em;\n" +
-"    margin: 0;\n" +
 "    padding: 0;\n" +
 "    transition: color 0.1s ease-out;\n" +
 "    border: none;\n" +
@@ -73927,9 +74272,10 @@ if (typeof window !== 'undefined' && window.Sweetalert2){  window.swal = window.
 "    background: transparent;\n" +
 "    color: #cccccc;\n" +
 "    font-family: serif;\n" +
-"    font-size: calc(2.5em - 0.25em);\n" +
-"    line-height: 1.2em;\n" +
-"    cursor: pointer; }\n" +
+"    font-size: 2.5em;\n" +
+"    line-height: 1.2;\n" +
+"    cursor: pointer;\n" +
+"    overflow: hidden; }\n" +
 "    .swal2-popup .swal2-close:hover {\n" +
 "      -webkit-transform: none;\n" +
 "              transform: none;\n" +
@@ -74049,6 +74395,7 @@ if (typeof window !== 'undefined' && window.Sweetalert2){  window.swal = window.
 "    .swal2-popup .swal2-validationerror::before {\n" +
 "      display: inline-block;\n" +
 "      width: 1.5em;\n" +
+"      min-width: 1.5em;\n" +
 "      height: 1.5em;\n" +
 "      margin: 0 .625em;\n" +
 "      border-radius: 50%;\n" +
@@ -74071,6 +74418,10 @@ if (typeof window !== 'undefined' && window.Sweetalert2){  window.swal = window.
 "    width: 100% !important; }\n" +
 "  .swal2-range output {\n" +
 "    display: none; } }\n" +
+"\n" +
+"@-moz-document url-prefix() {\n" +
+"  .swal2-close:focus {\n" +
+"    outline: 2px solid rgba(50, 100, 150, 0.4); } }\n" +
 "\n" +
 ".swal2-icon {\n" +
 "  position: relative;\n" +
@@ -74380,15 +74731,9 @@ __webpack_require__("./node_modules/datatables.net-bs/js/dataTables.bootstrap.js
 window.moment = __webpack_require__("./node_modules/moment/moment.js");
 window.moment.locale('pt-BR');
 
-// require('slimscroll');
-// require('fastclick');
-
 window.iziToast = __webpack_require__("./node_modules/izitoast/dist/js/iziToast.js");
 window.swal = __webpack_require__("./node_modules/sweetalert2/dist/sweetalert2.all.js");
 window.select2 = __webpack_require__("./node_modules/select2/dist/js/select2.js");
-
-//window.datepicker = require('bootstrap-datepicker');
-// window.datepicker = require('bootstrap-datepicker/js/locales/bootstrap-datepicker.pt-BR');
 
 /***/ }),
 
