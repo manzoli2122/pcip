@@ -32,7 +32,7 @@ class CreatePerguntaTable extends Migration
             
             $table->enum('dificuldade', ['Muito Dificil','Muito Facil','Dificil','Facil','Medio']);
 
-            $table->enum('status', ['Criada','Validada','Suspensa']);
+            $table->enum('status', ['Criada','Validada','Suspensa' , 'Finalizada']);
 
 
             $table->softDeletes();

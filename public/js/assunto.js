@@ -393,6 +393,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 __webpack_require__("./resources/assets/js/datatables-padrao.js");
 
@@ -407,7 +409,7 @@ __webpack_require__("./resources/assets/js/datatables-padrao.js");
         ajax: {
           url: url + '/getDatatable'
         },
-        columns: [{ data: 'id', name: 'id' }, { data: 'nome', name: 'nome' }, { data: 'descricao', name: 'descricao' }, { data: 'action', name: 'action', orderable: false, searchable: false, class: 'align-center' }]
+        columns: [{ data: 'id', name: 'id' }, { data: 'nome', name: 'nome' }, { data: 'descricao', name: 'descricao' }, { data: 'disciplina_id', name: 'disciplina_id' }, { data: 'disciplina.nome', name: 'disciplina.nome' }, { data: 'action', name: 'action', orderable: false, searchable: false, class: 'align-center' }]
       });
 
       dataTable.on('draw', function () {
@@ -434,6 +436,14 @@ __webpack_require__("./resources/assets/js/datatables-padrao.js");
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__core_Form__ = __webpack_require__("./resources/assets/js/core/Form.js");
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -1009,15 +1019,26 @@ var staticRenderFns = [
                     [
                       _c("thead", [
                         _c("tr", [
-                          _c("th", { staticStyle: { "max-width": "20px" } }, [
-                            _vm._v("ID")
-                          ]),
+                          _c(
+                            "th",
+                            {
+                              staticStyle: { "max-width": "35px" },
+                              attrs: { pesquisavel: "" }
+                            },
+                            [_vm._v("ID")]
+                          ),
                           _vm._v(" "),
                           _c("th", { attrs: { pesquisavel: "" } }, [
                             _vm._v("Nome")
                           ]),
                           _vm._v(" "),
                           _c("th", [_vm._v("Descricao")]),
+                          _vm._v(" "),
+                          _c("th", { attrs: { pesquisavel: "" } }, [
+                            _vm._v("disciplina")
+                          ]),
+                          _vm._v(" "),
+                          _c("th", [_vm._v("disciplina")]),
                           _vm._v(" "),
                           _c(
                             "th",
@@ -1124,18 +1145,39 @@ var render = function() {
                               ]
                             ),
                             _vm._v(" "),
-                            _c("p", { staticStyle: { "text-align": "left" } }, [
-                              _vm._v(
-                                " \n\t\t\t\t\t\t\t\t\t " +
-                                  _vm._s(pergunta.texto) +
-                                  " "
-                              ),
-                              _c("br"),
-                              _vm._v(" "),
-                              _c("span", {
-                                domProps: { innerHTML: _vm._s(pergunta.resumo) }
-                              })
-                            ])
+                            _c(
+                              "p",
+                              { staticStyle: { "text-align": "left" } },
+                              [
+                                _vm._v(
+                                  " \n\t\t\t\t\t\t\t\t\t " +
+                                    _vm._s(pergunta.texto) +
+                                    " "
+                                ),
+                                _c("br"),
+                                _vm._v(" "),
+                                _vm._l(pergunta.resposta, function(resposta) {
+                                  return _c("span", [
+                                    _vm._v("\n\t\t\t\t\t\t\t\t\t\t\t( )"),
+                                    _c("span", {
+                                      domProps: {
+                                        innerHTML: _vm._s(resposta.texto)
+                                      }
+                                    }),
+                                    _c("br")
+                                  ])
+                                }),
+                                _vm._v(" "),
+                                _c("br"),
+                                _vm._v(" "),
+                                _c("span", {
+                                  domProps: {
+                                    innerHTML: _vm._s(pergunta.resumo)
+                                  }
+                                })
+                              ],
+                              2
+                            )
                           ])
                         ]
                       )

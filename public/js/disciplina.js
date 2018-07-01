@@ -1143,11 +1143,11 @@ var render = function() {
                       _c("div", { staticClass: "col-12 col-sm-12 dado" }, [
                         _c("p", { staticStyle: { "text-align": "left" } }, [
                           _vm._v(
-                            " " +
-                              _vm._s(assunto.perguntas_count) +
+                            _vm._s(assunto.perguntas_count) +
                               " - " +
                               _vm._s(assunto.nome) +
-                              " "
+                              " - id:" +
+                              _vm._s(assunto.id)
                           )
                         ])
                       ])

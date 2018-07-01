@@ -81,7 +81,7 @@ class Pergunta extends Model
 
 
     public function getDatatable(){
-        return $this->with('assunto')->select([ 'pergunta.id' ,  'pergunta.texto' , 'pergunta.assunto_id' , 'pergunta.dificuldade' ])->orderBy('id', 'asc') ;        
+        return $this->with('assunto')->select([ 'pergunta.id' ,  'pergunta.texto' , 'pergunta.assunto_id' , 'pergunta.dificuldade' , 'pergunta.status'])->orderBy('id', 'asc') ;        
     }
  
     

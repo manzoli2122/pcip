@@ -142,6 +142,19 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -158,7 +171,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         texto: '',
         resumo: '',
         assunto_id: '',
-        dificuldade: ''
+        dificuldade: '',
+        status: ''
+
       })
     };
   },
@@ -171,6 +186,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.form.resumo = this.model.resumo;
       this.form.assunto_id = this.model.assunto_id;
       this.form.dificuldade = this.model.dificuldade;
+      this.form.status = this.model.status;
       alertProcessandoHide();
     }
 
@@ -409,6 +425,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
 
 __webpack_require__("./resources/assets/js/datatables-padrao.js");
 
@@ -423,7 +441,7 @@ __webpack_require__("./resources/assets/js/datatables-padrao.js");
         ajax: {
           url: url + '/getDatatable'
         },
-        columns: [{ data: 'id', name: 'pergunta.id' }, { data: 'texto', name: 'pergunta.texto' }, { data: 'assunto.nome', name: 'assunto.nome' }, { data: 'dificuldade', name: 'dificuldade' }, { data: 'assunto.disciplina.nome', name: 'assunto.disciplina.nome', orderable: false, searchable: false }, { data: 'action', name: 'action', orderable: false, searchable: false, class: 'align-center' }]
+        columns: [{ data: 'id', name: 'pergunta.id' }, { data: 'texto', name: 'pergunta.texto' }, { data: 'assunto.nome', name: 'assunto.nome' }, { data: 'dificuldade', name: 'dificuldade' }, { data: 'status', name: 'status' }, { data: 'assunto.disciplina.nome', name: 'assunto.disciplina.nome', orderable: false, searchable: false }, { data: 'assunto.disciplina_id', name: 'assunto.disciplina_id', orderable: true, searchable: true }, { data: 'action', name: 'action', orderable: false, searchable: false, class: 'align-center' }]
       });
 
       dataTable.on('draw', function () {
@@ -766,7 +784,20 @@ var staticRenderFns = [
                             _vm._v("Dificuldade")
                           ]),
                           _vm._v(" "),
+                          _c("th", { attrs: { pesquisavel: "" } }, [
+                            _vm._v("Status")
+                          ]),
+                          _vm._v(" "),
                           _c("th", [_vm._v("Disciplina")]),
+                          _vm._v(" "),
+                          _c(
+                            "th",
+                            {
+                              staticStyle: { "max-width": "35px" },
+                              attrs: { pesquisavel: "" }
+                            },
+                            [_vm._v("DD")]
+                          ),
                           _vm._v(" "),
                           _c(
                             "th",
@@ -953,6 +984,58 @@ var render = function() {
                           _c("div", { staticClass: "col-md-12" }, [
                             _c(
                               "div",
+                              { staticClass: "form-group" },
+                              [
+                                _vm._m(2),
+                                _vm._v(" "),
+                                _c(
+                                  "select2",
+                                  {
+                                    staticClass: "form-control  ",
+                                    model: {
+                                      value: _vm.form.status,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.form, "status", $$v)
+                                      },
+                                      expression: "form.status"
+                                    }
+                                  },
+                                  [
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "Criada" } },
+                                      [_vm._v(" Criada ")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "Validada" } },
+                                      [_vm._v(" Validada ")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "Suspensa" } },
+                                      [_vm._v(" Suspensa ")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "Finalizada" } },
+                                      [_vm._v("   Finalizada ")]
+                                    )
+                                  ]
+                                )
+                              ],
+                              1
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "row" }, [
+                          _c("div", { staticClass: "col-md-12" }, [
+                            _c(
+                              "div",
                               {
                                 staticClass: "form-group",
                                 class: {
@@ -1015,7 +1098,7 @@ var render = function() {
                                 attrs: { id: "div-form-produto-produto" }
                               },
                               [
-                                _vm._m(2),
+                                _vm._m(3),
                                 _vm._v(" "),
                                 _c(
                                   "select2",
@@ -1111,6 +1194,18 @@ var staticRenderFns = [
         "label",
         { staticStyle: { display: "block" }, attrs: { for: "assunto_id" } },
         [_vm._v("Dificuldade:")]
+      )
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("h4", [
+      _c(
+        "label",
+        { staticStyle: { display: "block" }, attrs: { for: "status" } },
+        [_vm._v("Status:")]
       )
     ])
   },

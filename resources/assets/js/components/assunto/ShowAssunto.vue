@@ -34,6 +34,14 @@
 									<h1 style="text-align:center;"> Pergunta {{pergunta.id}}: </h1>
 									<p style="text-align:left;"> 
 										 {{pergunta.texto}} <br>
+											
+
+											<span v-for="resposta in pergunta.resposta">
+												( )<span v-html="resposta.texto"></span><br>
+											</span>
+
+											<br>
+
 										<span v-html="pergunta.resumo"></span>
 									</p>
 								</div>  

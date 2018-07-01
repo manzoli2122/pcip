@@ -101,7 +101,7 @@ class RespostaController extends VueController
 
 
 
-
+ 
     
     /**
     * Processa a requisição AJAX do DataTable na página de listagem.
@@ -109,30 +109,27 @@ class RespostaController extends VueController
     *
     * @return \Illuminate\Http\JsonResponse
     */
-    // public function getDatatable( Request $request ){
-    //     try
-    //     {
-            
-    //         $models = $this->model->getDatatable();
+    public function getDatatable( Request $request ){
+        try
+        {            
+            $models = $this->model->getDatatable();
+            $result = \Yajra\DataTables\DataTables::of($models)
+                ->addColumn('action', function($linha) {
+                    return  '<a href="#/edit/'.$linha->id.'" class="btn btn-success btn-datatable" title="Editar" style="margin-left: 10px;"><i class="fa fa-pencil"></i></a>'
 
-    //         $result = \Yajra\DataTables\DataTables::of($models)
-    //             ->addColumn('action', function($linha) {
-    //                 return '<button data-id="'.$linha->id.'" type="button" class="btn btn-danger  btn-xs btn-datatable" btn-excluir title="Excluir">                               <i class="fa fa-times"> </i> </button> '
-    //                      . '<button data-id="'.$linha->id.'" type="button" class="btn btn-success btn-xs btn-datatable" btn-editar  title="Editar"     style="margin-left: 10px;"> <i class="fa fa-pencil"></i> </button>'
-    //                      . '<button data-id="'.$linha->id.'" type="button" class="btn btn-primary btn-xs btn-datatable" btn-show    title="Visualizar" style="margin-left: 10px;"> <i class="fa fa-search"></i> </button>' ;
-    //             })->make(true);
-
-    //         return $result ;
+                         . '<a href="#/show/'.$linha->id.'" class="btn btn-primary btn-datatable" title="Visualizar" style="margin-left: 10px;"><i class="fa fa-search"></i></a>'
+                        ;
+                })->make(true);
+            return $result ;        
+        }         
+        catch (Exception $e) {           
+            return response()->json( $e->getMessage() , 500);
+        }
         
-    //     } 
-        
-    //     catch (Exception $e) {           
-    //         return response()->json( $e->getMessage() , 500);
-    //     }
-        
-    // }
+    }
     
     
+
 
 
 

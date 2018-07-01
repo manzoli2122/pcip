@@ -34,6 +34,19 @@
 		                      	</div>
 		                      </div>
 		                      <div class="row">
+		                      	<div class="col-md-12">
+		                      		<div class="form-group" >
+		                      			<h4><label  for="status" style="display: block;" >Status:</label></h4>
+		                      			<select2   v-model="form.status" class="form-control  "> 
+		                      				<option   value="Criada"> Criada </option>
+		                      				<option   value="Validada"> Validada </option>
+		                      				<option   value="Suspensa"> Suspensa </option>
+		                      				<option   value="Finalizada">   Finalizada </option>
+		                      			</select2>                               
+		                      		</div>
+		                      	</div>
+		                      </div>
+		                      <div class="row">
 		                         <div class="col-md-12">
 		                             <div class="form-group" v-bind:class="{  'has-error': form.errors.has('resumo') }">
 		                                <label for="resumo"  >Resumo da Pergunta:</label>
@@ -87,7 +100,9 @@ export default {
                     texto: '',    
                     resumo: '',
                     assunto_id:'' ,
-                    dificuldade:'',             
+                    dificuldade:'',    
+                    status:'',    
+
                	})
             }
     },
@@ -99,6 +114,7 @@ export default {
             this.form.resumo = this.model.resumo;
             this.form.assunto_id = this.model.assunto_id ;
             this.form.dificuldade = this.model.dificuldade ;
+            this.form.status = this.model.status ;
             alertProcessandoHide();
           },
 

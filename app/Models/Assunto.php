@@ -21,7 +21,7 @@ class Assunto extends Model
     ];
 
     protected $hidden = [
-               'deleted_at' ,     'updated_at' , 'disciplina_id' ,
+               'deleted_at' ,     'updated_at' ,  
     ];
 
 
@@ -43,7 +43,7 @@ class Assunto extends Model
 
     
     public function getDatatable(){
-        return $this->select([ 'id' ,  'nome', 'descricao',   ])->orderBy('nome', 'asc');        
+        return $this->with('disciplina')->select([ 'id' ,  'nome', 'descricao', 'disciplina_id'  ])->orderBy('nome', 'asc');        
     }
     
    

@@ -24,7 +24,9 @@
                     <th pesquisavel>Texto</th> 
                      <th pesquisavel>Assunto</th>       
                      <th pesquisavel>Dificuldade</th>       
+                     <th pesquisavel>Status</th>       
                      <th>Disciplina</th>            
+                     <th pesquisavel  style="max-width:35px">DD</th>            
                     <th class="align-center" style="width:140px">Ações</th>
                   </tr>
                 </thead>  
@@ -59,7 +61,9 @@ export default {
         { data: 'texto', name: 'pergunta.texto' }, 
         { data: 'assunto.nome', name: 'assunto.nome' }, 
         { data: 'dificuldade', name: 'dificuldade' }, 
-         { data: 'assunto.disciplina.nome', name: 'assunto.disciplina.nome' , orderable: false, searchable: false }, 
+        { data: 'status', name: 'status' }, 
+        { data: 'assunto.disciplina.nome', name: 'assunto.disciplina.nome' , orderable: false, searchable: false }, 
+        { data: 'assunto.disciplina_id', name: 'assunto.disciplina_id' , orderable: true, searchable: true }, 
         { data: 'action', name: 'action', orderable: false, searchable: false, class: 'align-center'}
         ],
       });

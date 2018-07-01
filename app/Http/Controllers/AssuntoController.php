@@ -70,7 +70,7 @@ class AssuntoController extends VueController
             if( !$model = $this->model->find($id) ){       
                 return response()->json(['erro' => true , 'msg' => ''  , 'data' => null ], 200);    
             }                   
-            return response()->json( $model->perguntas , 200);
+            return response()->json( $model->perguntas()->with('resposta')->get() , 200);
         }         
         catch(Exception $e) {           
             return response()->json(['erro' => true , 'msg' => ''  , 'data' => null ], 200);    

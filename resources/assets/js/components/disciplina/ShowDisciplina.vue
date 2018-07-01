@@ -30,7 +30,7 @@
 							<section  v-for="assunto in assuntos"  class="row text-center dados"> 
 								 
 									<div class="col-12 col-sm-12 dado">
-										<p style="text-align:left;"> {{assunto.perguntas_count}} - {{assunto.nome}} </p>
+										<p style="text-align:left;">{{assunto.perguntas_count}} - {{assunto.nome}} - id:{{assunto.id}}</p>
 									</div>
 								 
 							</section>
