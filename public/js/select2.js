@@ -60,77 +60,22 @@
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 8);
+/******/ 	return __webpack_require__(__webpack_require__.s = 2);
 /******/ })
 /************************************************************************/
 /******/ ({
 
-/***/ "./resources/assets/js/datatables-padrao.js":
+/***/ "./resources/assets/js/select2.js":
 /***/ (function(module, exports) {
 
-window.datatablePadrao = function (seletorTabela, configEspecifica) {
-    var lengthMenu = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : [[10, 25, 50, -1], [10, 25, 50, "Todos"]];
 
-    var csrf_token = document.head.querySelector('meta[name="csrf-token"]').content;
-
-    var configPadrao = {
-        processing: true,
-        serverSide: true,
-        pagingType: "simple_numbers",
-        lengthMenu: lengthMenu,
-        language: { url: "https://cdn.datatables.net/plug-ins/1.10.12/i18n/Portuguese-Brasil.json" },
-        ajax: {
-            type: 'post',
-            data: { '_token': csrf_token }
-        },
-        // Retira a busca a cada caractere digitado. Pesquisando apenas com Enter
-        initComplete: function initComplete() {
-            var $searchInput = $('div.dataTables_filter input');
-
-            $searchInput.unbind();
-
-            $searchInput.bind('keyup', function (e) {
-                if (e.keyCode == 13) {
-                    dataTable.search(this.value).draw();
-                }
-            });
-        }
-    };
-
-    var config = _.merge(configPadrao, configEspecifica);
-
-    // Adiciona os campos para busca individual das colunas
-    $(seletorTabela + ' thead th[pesquisavel]').each(function () {
-        var title = $(seletorTabela + ' thead th').eq($(this).index()).text();
-        $(this).html('<input type="text" pesquisavel placeholder="' + title + '" />');
-    });
-
-    var dataTable = $(seletorTabela).DataTable(config);
-
-    // Aplica a busca individual das colunas
-    dataTable.columns().eq(0).each(function (colIdx) {
-        $('input', dataTable.column(colIdx).header()).on('keypress change click', function (e) {
-            if (e.type === 'change' || e.which === 13) {
-                dataTable.column(colIdx).search(this.value).draw();
-
-                e.stopPropagation();
-            }
-        });
-
-        $('input', dataTable.column(colIdx).header()).on('click', function (e) {
-            e.stopPropagation();
-        });
-    });
-
-    return dataTable;
-};
 
 /***/ }),
 
-/***/ 8:
+/***/ 2:
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__("./resources/assets/js/datatables-padrao.js");
+module.exports = __webpack_require__("./resources/assets/js/select2.js");
 
 
 /***/ })

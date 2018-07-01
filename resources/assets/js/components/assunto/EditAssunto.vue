@@ -1,5 +1,5 @@
 <template>             
-	<div>
+	<div v-if="model">
 		  <section class="content-header">
 		      <h1>  <span id="div-titulo-pagina">Alterar Assunto</span>   </h1>
 		  </section> 
@@ -28,6 +28,20 @@
 		                             </div>
 		                          </div>
 		                      </div>
+
+                          <div class="row">
+                             <div class="col-md-12">
+                              <div id="div-form-produto-produto" class="form-group" >
+                                <h4><label  for="produto_id" style="display: block;" >Disciplina:</label></h4>
+                                <select v-model="form.disciplina_id" id="disciplina_id" class="form-control produto_id_select" name="disciplina_id" required style="width: 100%"> 
+                                  <option    value="">Selecione a Disciplina </option>  
+                                    <option v-for="item in disciplina" :key="item.id" :value="item.id"> {{ item.nome }}</option>   
+                                  </select>                                 
+                                </div>
+                           
+                              </div>
+                          </div>
+
 		                  </div>
 		                  <div class="box-footer align-right">
 		                      <router-link  to="/" exact>
@@ -55,12 +69,15 @@ export default {
     ], 
 
     data() {
-        return {                
-               model:'',
-               form: new Form({
+        return {   
+
+                disciplina:'',             
+                model:'',
+                form: new Form({
                     nome: '',    
-                    descricao: ''               
-               })
+                    descricao: '',
+                    disciplina_id: '',            
+                })
             }
     },
  	
@@ -69,12 +86,23 @@ export default {
          model: function (newmodel, oldmodel) {
             this.form.nome = this.model.nome;
             this.form.descricao = this.model.descricao;
+            this.form.disciplina_id = this.model.disciplina.id;
             alertProcessandoHide();
           }
 
     },    
 
  	created() {
+
+    axios.get(this.url + '/disciplina'  )
+      .then(response => {
+        this.disciplina = response.data ;
+      })
+      .catch(error => {
+        toastErro('Não foi possivel achar as disciplinas');
+      });
+
+
           alertProcessando();
           axios.get(this.url + '/' + this.$route.params.id )
                     .then(response => {

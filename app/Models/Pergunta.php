@@ -17,7 +17,7 @@ class Pergunta extends Model
 
 
     protected $fillable = [
-            'texto',  'resposta_certa_id' , 'assunto_id' , 'resumo' , 'ativo' , 'dificuldade', 
+            'texto',  'resposta_certa_id' , 'assunto_id' , 'resumo' , 'ativo' , 'dificuldade', 'status', 
     ];
 
     protected $casts = [

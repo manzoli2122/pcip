@@ -19,6 +19,22 @@
                                       <span class="help is-danger" v-if="form.errors.has('texto')" v-text="form.errors.get('texto')"></span>
                                  </div>
                               </div>
+                            </div>
+                            <div class="row">
+                            <div class="col-md-12">
+                              <div class="form-group" >
+                                <h4><label  for="assunto_id" style="display: block;" >Dificuldade:</label></h4>
+                                <select2   v-model="form.dificuldade" class="form-control  "> 
+                                  <option   value="Muito Facil"> Muito Fácil </option>
+                                  <option   value="Facil"> Fácil </option>
+                                  <option   value="Medio"> Medio </option>
+                                  <option   value="Dificil">   Difícil </option>
+                                  <option   value="Muito Dificil"> Muito Difícil </option>
+                                </select2>                               
+                              </div>
+                            </div>
+                          </div>
+                          <div class="row">
                               <div class="col-md-12">
                                  <div class="form-group" v-bind:class="{  'has-error': form.errors.has('resumo') }">
                                       <label for="resumo"  >Resumo da Pergunta:</label>
@@ -27,7 +43,7 @@
                                  </div>
                               </div>
                          </div>
-
+                         
                          <div class="row">
                              <div class="col-md-12">
                               <div id="div-form-produto-produto" class="form-group" >
@@ -81,7 +97,8 @@ export default {
                form: new Form({
                     texto: '',   
                     assunto_id: '',   
-                    resumo:'' ,          
+                    resumo:'' ,  
+                    dificuldade:'',        
                })
             }
         },

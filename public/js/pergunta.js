@@ -142,86 +142,81 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
-//
-//
 
 
 
 
 /* harmony default export */ __webpack_exports__["default"] = ({
 
-    props: ['url'],
+  props: ['url'],
 
-    data: function data() {
-        return {
-            assunto: '',
-            model: '',
-            form: new __WEBPACK_IMPORTED_MODULE_0__core_Form__["a" /* default */]({
-                texto: '',
-                resumo: '',
-                assunto_id: '',
-                dificuldade: ''
-            })
-        };
-    },
-
-
-    watch: {
-
-        model: function model(newmodel, oldmodel) {
-            this.form.texto = this.model.texto;
-            this.form.resumo = this.model.resumo;
-            this.form.assunto_id = this.model.assunto_id;
-            this.form.dificuldade = this.model.dificuldade;
-            alertProcessandoHide();
-        }
-
-    },
-
-    created: function created() {
-        var _this = this;
-
-        axios.get(this.url + '/assunto').then(function (response) {
-            _this.assunto = response.data;
-        }).catch(function (error) {
-            toastErro('Não foi possivel achar as assunto');
-        });
-    },
-    mounted: function mounted() {
-        var _this2 = this;
-
-        alertProcessando();
-        axios.get(this.url + '/' + this.$route.params.id).then(function (response) {
-            _this2.model = response.data;
-        }).catch(function (error) {
-            toastErro('Não foi possivel achar as pergunta');
-        });
-    },
+  data: function data() {
+    return {
+      assunto: '',
+      model: '',
+      form: new __WEBPACK_IMPORTED_MODULE_0__core_Form__["a" /* default */]({
+        texto: '',
+        resumo: '',
+        assunto_id: '',
+        dificuldade: ''
+      })
+    };
+  },
 
 
-    methods: {
-        onSubmit: function onSubmit() {
-            this.form.patch(this.url + '/' + this.$route.params.id).then(function (response) {
-                return swal({
+  watch: {
 
-                    type: 'success',
-                    showCloseButton: true,
-                    title: 'Pergunta Atualizada com sucesso!!',
-                    timer: 5000,
-                    width: 400,
-
-                    confirmButtonColor: '#646464',
-                    confirmButtonText: '<h4>OK</h4>',
-                    confirmButtonClass: 'bg-green'
-
-                });
-            }).catch(function (errors) {
-                return console.log(errors);
-            });
-
-            this.$router.push('/');
-        }
+    model: function model(newmodel, oldmodel) {
+      this.form.texto = this.model.texto;
+      this.form.resumo = this.model.resumo;
+      this.form.assunto_id = this.model.assunto_id;
+      this.form.dificuldade = this.model.dificuldade;
+      alertProcessandoHide();
     }
+
+  },
+
+  created: function created() {
+    var _this = this;
+
+    axios.get(this.url + '/assunto').then(function (response) {
+      _this.assunto = response.data;
+    }).catch(function (error) {
+      toastErro('Não foi possivel achar as assunto');
+    });
+
+    alertProcessando();
+    axios.get(this.url + '/' + this.$route.params.id).then(function (response) {
+      _this.model = response.data;
+    }).catch(function (error) {
+      toastErro('Não foi possivel achar as pergunta');
+    });
+  },
+
+
+  methods: {
+    onSubmit: function onSubmit() {
+      this.form.patch(this.url + '/' + this.$route.params.id).then(function (response) {
+        return swal({
+
+          type: 'success',
+          showCloseButton: true,
+          title: 'Pergunta Atualizada com sucesso!!',
+          timer: 5000,
+          width: 400,
+
+          confirmButtonColor: '#646464',
+          confirmButtonText: '<h4>OK</h4>',
+          confirmButtonClass: 'bg-green'
+
+        });
+      }).catch(function (errors) {
+        return console.log(errors);
+      });
+
+      this.$router.push('/');
+    }
+  }
 
 });
 
@@ -299,6 +294,22 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
@@ -313,7 +324,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             form: new __WEBPACK_IMPORTED_MODULE_0__core_Form__["a" /* default */]({
                 texto: '',
                 assunto_id: '',
-                resumo: ''
+                resumo: '',
+                dificuldade: ''
             })
         };
     },
@@ -795,276 +807,287 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", [
-    _vm._m(0),
-    _vm._v(" "),
-    _c("section", { staticClass: "content" }, [
-      _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-xs-12" }, [
-          _c(
-            "div",
-            { staticClass: "box box-success", attrs: { id: "div-box" } },
-            [
+  return _vm.model
+    ? _c("div", [
+        _vm._m(0),
+        _vm._v(" "),
+        _c("section", { staticClass: "content" }, [
+          _c("div", { staticClass: "row" }, [
+            _c("div", { staticClass: "col-xs-12" }, [
               _c(
-                "form",
-                {
-                  attrs: { method: "POST", action: "#" },
-                  on: {
-                    submit: function($event) {
-                      $event.preventDefault()
-                      return _vm.onSubmit($event)
-                    },
-                    keydown: function($event) {
-                      _vm.form.errors.clear($event.target.name)
-                    }
-                  }
-                },
+                "div",
+                { staticClass: "box box-success", attrs: { id: "div-box" } },
                 [
-                  _c("div", { staticClass: "box-body" }, [
-                    _c("div", { staticClass: "row" }, [
-                      _c("div", { staticClass: "col-md-12" }, [
-                        _c(
-                          "div",
-                          {
-                            staticClass: "form-group",
-                            class: { "has-error": _vm.form.errors.has("texto") }
-                          },
-                          [
-                            _c("label", { attrs: { for: "texto" } }, [
-                              _vm._v("Pergunta:")
-                            ]),
-                            _vm._v(" "),
-                            _c("textarea", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.form.texto,
-                                  expression: "form.texto"
-                                }
-                              ],
-                              staticClass: "form-control input",
-                              staticStyle: { height: "200px" },
-                              attrs: { id: "texto", name: "texto" },
-                              domProps: { value: _vm.form.texto },
-                              on: {
-                                input: function($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.$set(
-                                    _vm.form,
-                                    "texto",
-                                    $event.target.value
-                                  )
-                                }
-                              }
-                            }),
-                            _vm._v(" "),
-                            _vm.form.errors.has("texto")
-                              ? _c("span", {
-                                  staticClass: "help is-danger",
-                                  domProps: {
-                                    textContent: _vm._s(
-                                      _vm.form.errors.get("texto")
-                                    )
-                                  }
-                                })
-                              : _vm._e()
-                          ]
-                        )
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "row" }, [
-                      _c("div", { staticClass: "col-md-12" }, [
-                        _c(
-                          "div",
-                          { staticClass: "form-group" },
-                          [
-                            _vm._m(1),
-                            _vm._v(" "),
+                  _c(
+                    "form",
+                    {
+                      attrs: { method: "POST", action: "#" },
+                      on: {
+                        submit: function($event) {
+                          $event.preventDefault()
+                          return _vm.onSubmit($event)
+                        },
+                        keydown: function($event) {
+                          _vm.form.errors.clear($event.target.name)
+                        }
+                      }
+                    },
+                    [
+                      _c("div", { staticClass: "box-body" }, [
+                        _c("div", { staticClass: "row" }, [
+                          _c("div", { staticClass: "col-md-12" }, [
                             _c(
-                              "select2",
+                              "div",
                               {
-                                staticClass: "form-control  ",
-                                model: {
-                                  value: _vm.form.dificuldade,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.form, "dificuldade", $$v)
-                                  },
-                                  expression: "form.dificuldade"
+                                staticClass: "form-group",
+                                class: {
+                                  "has-error": _vm.form.errors.has("texto")
                                 }
                               },
                               [
-                                _c(
-                                  "option",
-                                  { attrs: { value: "Muito Facil" } },
-                                  [_vm._v(" Muito Fácil ")]
-                                ),
-                                _vm._v(" "),
-                                _c("option", { attrs: { value: "Facil" } }, [
-                                  _vm._v(" Fácil ")
+                                _c("label", { attrs: { for: "texto" } }, [
+                                  _vm._v("Pergunta:")
                                 ]),
                                 _vm._v(" "),
-                                _c("option", { attrs: { value: "Medio" } }, [
-                                  _vm._v(" Medio ")
-                                ]),
+                                _c("textarea", {
+                                  directives: [
+                                    {
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.form.texto,
+                                      expression: "form.texto"
+                                    }
+                                  ],
+                                  staticClass: "form-control input",
+                                  staticStyle: { height: "200px" },
+                                  attrs: { id: "texto", name: "texto" },
+                                  domProps: { value: _vm.form.texto },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        _vm.form,
+                                        "texto",
+                                        $event.target.value
+                                      )
+                                    }
+                                  }
+                                }),
                                 _vm._v(" "),
-                                _c("option", { attrs: { value: "Dificil" } }, [
-                                  _vm._v("   Difícil ")
-                                ]),
-                                _vm._v(" "),
-                                _c(
-                                  "option",
-                                  { attrs: { value: "Muito Dificil" } },
-                                  [_vm._v(" Muito Difícil ")]
-                                )
+                                _vm.form.errors.has("texto")
+                                  ? _c("span", {
+                                      staticClass: "help is-danger",
+                                      domProps: {
+                                        textContent: _vm._s(
+                                          _vm.form.errors.get("texto")
+                                        )
+                                      }
+                                    })
+                                  : _vm._e()
                               ]
                             )
-                          ],
-                          1
-                        )
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "row" }, [
-                      _c("div", { staticClass: "col-md-12" }, [
-                        _c(
-                          "div",
-                          {
-                            staticClass: "form-group",
-                            class: {
-                              "has-error": _vm.form.errors.has("resumo")
-                            }
-                          },
-                          [
-                            _c("label", { attrs: { for: "resumo" } }, [
-                              _vm._v("Resumo da Pergunta:")
-                            ]),
-                            _vm._v(" "),
-                            _c("textarea", {
-                              directives: [
-                                {
-                                  name: "model",
-                                  rawName: "v-model",
-                                  value: _vm.form.resumo,
-                                  expression: "form.resumo"
-                                }
-                              ],
-                              staticClass: "form-control input",
-                              staticStyle: { height: "300px" },
-                              attrs: { id: "resumo", name: "resumo" },
-                              domProps: { value: _vm.form.resumo },
-                              on: {
-                                input: function($event) {
-                                  if ($event.target.composing) {
-                                    return
-                                  }
-                                  _vm.$set(
-                                    _vm.form,
-                                    "resumo",
-                                    $event.target.value
-                                  )
-                                }
-                              }
-                            }),
-                            _vm._v(" "),
-                            _vm.form.errors.has("resumo")
-                              ? _c("span", {
-                                  staticClass: "help is-danger",
-                                  domProps: {
-                                    textContent: _vm._s(
-                                      _vm.form.errors.get("resumo")
-                                    )
-                                  }
-                                })
-                              : _vm._e()
-                          ]
-                        )
-                      ])
-                    ]),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "row" }, [
-                      _c("div", { staticClass: "col-md-12" }, [
-                        _c(
-                          "div",
-                          {
-                            staticClass: "form-group",
-                            attrs: { id: "div-form-produto-produto" }
-                          },
-                          [
-                            _vm._m(2),
-                            _vm._v(" "),
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "row" }, [
+                          _c("div", { staticClass: "col-md-12" }, [
                             _c(
-                              "select2",
-                              {
-                                staticClass: "form-control produto_id_select",
-                                model: {
-                                  value: _vm.form.assunto_id,
-                                  callback: function($$v) {
-                                    _vm.$set(_vm.form, "assunto_id", $$v)
+                              "div",
+                              { staticClass: "form-group" },
+                              [
+                                _vm._m(1),
+                                _vm._v(" "),
+                                _c(
+                                  "select2",
+                                  {
+                                    staticClass: "form-control  ",
+                                    model: {
+                                      value: _vm.form.dificuldade,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.form, "dificuldade", $$v)
+                                      },
+                                      expression: "form.dificuldade"
+                                    }
                                   },
-                                  expression: "form.assunto_id"
+                                  [
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "Muito Facil" } },
+                                      [_vm._v(" Muito Fácil ")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "Facil" } },
+                                      [_vm._v(" Fácil ")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "Medio" } },
+                                      [_vm._v(" Medio ")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "Dificil" } },
+                                      [_vm._v("   Difícil ")]
+                                    ),
+                                    _vm._v(" "),
+                                    _c(
+                                      "option",
+                                      { attrs: { value: "Muito Dificil" } },
+                                      [_vm._v(" Muito Difícil ")]
+                                    )
+                                  ]
+                                )
+                              ],
+                              1
+                            )
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "row" }, [
+                          _c("div", { staticClass: "col-md-12" }, [
+                            _c(
+                              "div",
+                              {
+                                staticClass: "form-group",
+                                class: {
+                                  "has-error": _vm.form.errors.has("resumo")
                                 }
                               },
                               [
-                                _c("option", { attrs: { value: "" } }, [
-                                  _vm._v("Selecione a Assunto ")
+                                _c("label", { attrs: { for: "resumo" } }, [
+                                  _vm._v("Resumo da Pergunta:")
                                 ]),
                                 _vm._v(" "),
-                                _vm._l(_vm.assunto, function(item) {
-                                  return _c(
-                                    "option",
+                                _c("textarea", {
+                                  directives: [
                                     {
-                                      key: item.id,
-                                      domProps: { value: item.id }
-                                    },
-                                    [_vm._v(" " + _vm._s(item.nome))]
-                                  )
-                                })
-                              ],
-                              2
+                                      name: "model",
+                                      rawName: "v-model",
+                                      value: _vm.form.resumo,
+                                      expression: "form.resumo"
+                                    }
+                                  ],
+                                  staticClass: "form-control input",
+                                  staticStyle: { height: "300px" },
+                                  attrs: { id: "resumo", name: "resumo" },
+                                  domProps: { value: _vm.form.resumo },
+                                  on: {
+                                    input: function($event) {
+                                      if ($event.target.composing) {
+                                        return
+                                      }
+                                      _vm.$set(
+                                        _vm.form,
+                                        "resumo",
+                                        $event.target.value
+                                      )
+                                    }
+                                  }
+                                }),
+                                _vm._v(" "),
+                                _vm.form.errors.has("resumo")
+                                  ? _c("span", {
+                                      staticClass: "help is-danger",
+                                      domProps: {
+                                        textContent: _vm._s(
+                                          _vm.form.errors.get("resumo")
+                                        )
+                                      }
+                                    })
+                                  : _vm._e()
+                              ]
                             )
-                          ],
-                          1
-                        )
-                      ])
-                    ])
-                  ]),
-                  _vm._v(" "),
-                  _c(
-                    "div",
-                    { staticClass: "box-footer align-right" },
-                    [
-                      _c("router-link", { attrs: { to: "/", exact: "" } }, [
-                        _c("a", { staticClass: "btn btn-default" }, [
-                          _c("i", { staticClass: "fa fa-reply" }),
-                          _vm._v(" "),
-                          _c("span", [_vm._v("  Voltar ")])
+                          ])
+                        ]),
+                        _vm._v(" "),
+                        _c("div", { staticClass: "row" }, [
+                          _c("div", { staticClass: "col-md-12" }, [
+                            _c(
+                              "div",
+                              {
+                                staticClass: "form-group",
+                                attrs: { id: "div-form-produto-produto" }
+                              },
+                              [
+                                _vm._m(2),
+                                _vm._v(" "),
+                                _c(
+                                  "select2",
+                                  {
+                                    staticClass:
+                                      "form-control produto_id_select",
+                                    model: {
+                                      value: _vm.form.assunto_id,
+                                      callback: function($$v) {
+                                        _vm.$set(_vm.form, "assunto_id", $$v)
+                                      },
+                                      expression: "form.assunto_id"
+                                    }
+                                  },
+                                  [
+                                    _c("option", { attrs: { value: "" } }, [
+                                      _vm._v("Selecione a Assunto ")
+                                    ]),
+                                    _vm._v(" "),
+                                    _vm._l(_vm.assunto, function(item) {
+                                      return _c(
+                                        "option",
+                                        {
+                                          key: item.id,
+                                          domProps: { value: item.id }
+                                        },
+                                        [_vm._v(" " + _vm._s(item.nome))]
+                                      )
+                                    })
+                                  ],
+                                  2
+                                )
+                              ],
+                              1
+                            )
+                          ])
                         ])
                       ]),
                       _vm._v(" "),
                       _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-success",
-                          staticStyle: { "margin-left": "5px" },
-                          attrs: { disabled: _vm.form.errors.any() }
-                        },
-                        [_vm._v("Salvar")]
+                        "div",
+                        { staticClass: "box-footer align-right" },
+                        [
+                          _c("router-link", { attrs: { to: "/", exact: "" } }, [
+                            _c("a", { staticClass: "btn btn-default" }, [
+                              _c("i", { staticClass: "fa fa-reply" }),
+                              _vm._v(" "),
+                              _c("span", [_vm._v("  Voltar ")])
+                            ])
+                          ]),
+                          _vm._v(" "),
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-success",
+                              staticStyle: { "margin-left": "5px" },
+                              attrs: { disabled: _vm.form.errors.any() }
+                            },
+                            [_vm._v("Salvar")]
+                          )
+                        ],
+                        1
                       )
-                    ],
-                    1
+                    ]
                   )
                 ]
               )
-            ]
-          )
+            ])
+          ])
         ])
       ])
-    ])
-  ])
+    : _vm._e()
 }
 var staticRenderFns = [
   function() {
@@ -1200,8 +1223,62 @@ var render = function() {
                               : _vm._e()
                           ]
                         )
-                      ]),
-                      _vm._v(" "),
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "row" }, [
+                      _c("div", { staticClass: "col-md-12" }, [
+                        _c(
+                          "div",
+                          { staticClass: "form-group" },
+                          [
+                            _vm._m(1),
+                            _vm._v(" "),
+                            _c(
+                              "select2",
+                              {
+                                staticClass: "form-control  ",
+                                model: {
+                                  value: _vm.form.dificuldade,
+                                  callback: function($$v) {
+                                    _vm.$set(_vm.form, "dificuldade", $$v)
+                                  },
+                                  expression: "form.dificuldade"
+                                }
+                              },
+                              [
+                                _c(
+                                  "option",
+                                  { attrs: { value: "Muito Facil" } },
+                                  [_vm._v(" Muito Fácil ")]
+                                ),
+                                _vm._v(" "),
+                                _c("option", { attrs: { value: "Facil" } }, [
+                                  _vm._v(" Fácil ")
+                                ]),
+                                _vm._v(" "),
+                                _c("option", { attrs: { value: "Medio" } }, [
+                                  _vm._v(" Medio ")
+                                ]),
+                                _vm._v(" "),
+                                _c("option", { attrs: { value: "Dificil" } }, [
+                                  _vm._v("   Difícil ")
+                                ]),
+                                _vm._v(" "),
+                                _c(
+                                  "option",
+                                  { attrs: { value: "Muito Dificil" } },
+                                  [_vm._v(" Muito Difícil ")]
+                                )
+                              ]
+                            )
+                          ],
+                          1
+                        )
+                      ])
+                    ]),
+                    _vm._v(" "),
+                    _c("div", { staticClass: "row" }, [
                       _c("div", { staticClass: "col-md-12" }, [
                         _c(
                           "div",
@@ -1267,7 +1344,7 @@ var render = function() {
                             attrs: { id: "div-form-produto-produto" }
                           },
                           [
-                            _vm._m(1),
+                            _vm._m(2),
                             _vm._v(" "),
                             _c(
                               "select2",
@@ -1350,6 +1427,18 @@ var staticRenderFns = [
           _vm._v("Adicionar Pergunta")
         ])
       ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("h4", [
+      _c(
+        "label",
+        { staticStyle: { display: "block" }, attrs: { for: "assunto_id" } },
+        [_vm._v("Dificuldade:")]
+      )
     ])
   },
   function() {

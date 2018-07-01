@@ -50,6 +50,7 @@ class PerguntaController extends VueController
 
     public function show(Request $request , $id)
     {
+         
         try {
             if( !$model = $this->model->with('assunto')->with('resposta')->find($id) ){       
                 return response()->json(['erro' => true , 'msg' => ''  , 'data' => null ], 200);    

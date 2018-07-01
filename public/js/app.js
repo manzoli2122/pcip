@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 8);
+/******/ 	return __webpack_require__(__webpack_require__.s = 9);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -13156,6 +13156,25 @@ window.alertInput = function (titulo, options, funcOnClose) {
     }))();
 };
 
+window.alertConfimacaoSweet = function (titulo, texto, funcaoSIM) {
+    var funcaoNAO = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : function () {};
+
+
+    swal({
+        title: titulo,
+        text: texto,
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Sim'
+    }).then(function (result) {
+        if (result.value) {
+            funcaoSIM();
+        }
+    });
+};
+
 /***/ }),
 
 /***/ "./resources/assets/js/app.js":
@@ -13987,7 +14006,7 @@ window.userShowTemp = function(id, url , funcSucesso = function() {} ) {
 
 /***/ }),
 
-/***/ 8:
+/***/ 9:
 /***/ (function(module, exports, __webpack_require__) {
 
 __webpack_require__("./resources/assets/js/alertas.js");

@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="{{ app()->getLocale() }}">
 
@@ -16,10 +15,23 @@
 
     <title> @yield('content-header') :: {{ config('app.name', 'Salão') }}</title>
    <!-- <link rel="shortcut icon" type="image/x-icon" href="/images/salao-icon.ico"> 
-   <link rel="shortcut icon" type="image/x-icon" href="/images/book">-->
-    
+   <link rel="shortcut icon" type="image/x-icon" href="/images/book">--> 
     <link rel="shortcut icon" type="image/x-icon" href="/images/book2.ico">
-    <link href="{{ mix('css/vendor.css') }}" rel="stylesheet" type="text/css"/>
+    
+    
+    <link href="{{ mix('css/bootstrap.css') }}" rel="stylesheet" type="text/css"/>
+
+    <link href="{{ mix('css/fonts.css') }}" rel="stylesheet" type="text/css"/>
+
+    <link href="{{ mix('css/select2.css') }}" rel="stylesheet" type="text/css"/>
+
+    <link href="{{ mix('css/alertas.css') }}" rel="stylesheet" type="text/css"/>
+
+
+
+
+
+
     <!-- <link href="/css/vendor.css" rel="stylesheet" type="text/css"/> -->
     <link href="{{ mix('css/template.css') }}" rel="stylesheet" type="text/css"/>
    
@@ -57,12 +69,14 @@
             @yield('content')
         </div>
         @include('templates.footer')
-    </div>
-
+    </div> 
     <script src="{{ mix('js/vendor.js') }}" type="text/javascript"></script>
-    
+     
     <script src="{{ mix('js/template.js') }}" type="text/javascript"></script>
+
     <script src="{{ mix('js/app.js') }}" type="text/javascript"></script>
+
+
     @stack('script')
 </body>
 
