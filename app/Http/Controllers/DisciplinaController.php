@@ -60,4 +60,32 @@ class DisciplinaController extends VueController
 
 
 
+
+
+
+
+    public function destroy( Request $request, $id)
+    {
+        try
+        {                      
+            if( !$model = $this->model->find($id) ){     
+                return response()->json('Item não encontrado.' , 404 );  
+            }
+
+            if( $model->assuntos->count() !== 0 ){     
+                return response()->json(['erro' => true , 'msg' => 'Aconteceu um Erro interno.'  , 'data' => null ], 500);  
+            }
+
+            if( !$delete = $model->delete() ){
+                return response()->json('Aconteceu um Erro interno.' , 500);
+            }
+
+            return response()->json(['erro' => false , 'msg' => $this->name . ' alterado no sistema' , 'data' =>  $delete ], 200 );            
+        }         
+        catch (Exception $e) {
+                return response()->json( 'Aconteceu um Erro interno.', 500);
+        }
+    }
+ 
+
 }
