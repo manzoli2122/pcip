@@ -17,6 +17,7 @@ Route::post('disciplina/getDatatable', 'DisciplinaController@getDatatable')->nam
 Route::get('disciplina/{id}/assuntos', 'DisciplinaController@getAssuntos')->name('disciplina.assuntos');
 Route::resource('disciplina', 'DisciplinaController')->except(['create', 'edit']); 
 Route::get('assunto/disciplina', 'DisciplinaController@disciplinas')->name('assunto.disciplinas');
+Route::get('treinamento/disciplina', 'DisciplinaController@disciplinas')->name('treinamento.disciplinas');
 
 
 
@@ -69,6 +70,7 @@ Route::get('jogo/proximo', 'JogoController@proximo')->name('jogo.proximo');
 
 
 
+Route::post('treinamento/disciplina', 'TreinamentoController@alterarDisciplina')->name('treinamento.disciplina');
 Route::post('treinamento/dificuldade', 'TreinamentoController@alterarDificuldade')->name('treinamento.dificuldade');
 Route::get('treinamento', 'TreinamentoController@index')->name('treinamento.index');
 Route::post('treinamento', 'TreinamentoController@responder')->name('treinamento.responder');

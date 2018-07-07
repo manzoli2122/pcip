@@ -48,59 +48,17 @@
     </div>
 
 
+ 
+      
+
+    <formDificuldade :url="url"  ></formDificuldade> 
 
 
-    <div class="row"> 
-      <div class="col-xs-12"><h3><b>Dificuldade:</b></h3> <span v-for="dif in temp.dificuldade">{{dif}} , </span>  </div> 
-    </div>
-     <form method="post" action="#"  @submit.prevent="enviarDificuldade">  
-            
-            <div class="box-body">  
-              <div class="row">
-                <div   class="col-md-12">
-                  <div class="checkbox">
-                    <label >
-                      <input  style="margin-top: 8px;" type="checkbox"  name="muitofacil" value="1" v-model="dificuldade.muitofacil">
-                       Muito Fácil
-                    </label>
-
-                    <label style=" margin-left: 25px;">
-                      <input  style="margin-top: 8px; " type="checkbox"  name="facil" value="1" v-model="dificuldade.facil">
-                       Fácil
-                    </label>
-
-                    <label style=" margin-left: 25px;">
-                      <input  style="margin-top: 8px; " type="checkbox"  name="medio" value="1" v-model="dificuldade.medio">
-                       Médio
-                    </label>
-
-                    <label style=" margin-left: 25px;">
-                      <input  style="margin-top: 8px; " type="checkbox"  name="dificil" value="1" v-model="dificuldade.dificil">
-                       Difícil
-                    </label>
-
-                    <label style=" margin-left: 25px;">
-                      <input  style="margin-top: 8px; " type="checkbox"  name="muitodificil" value="1" v-model="dificuldade.muitodificil">
-                      Muito Difícil
-                    </label>
+    <formDisciplina :url="url"  ></formDisciplina> 
  
 
-                  </div>
-                   
-                </div>
-              </div> 
-            </div> 
-            <div class="box-footer align-right">  
-               
-              <button class="btn btn-success btn-block "   type="submit">
-                <i class="fa fa-check"></i> Alterar Dificuldade  
-              </button>
-            </div>
-          </form>      
+      </section>
 
-
-  </section>
- 
 
 </template>
 
@@ -108,7 +66,13 @@
 
 
 <script>
+
+  Vue.component('formDificuldade', require('./dificuldade.vue'));
+  Vue.component('formDisciplina', require('./disciplina.vue'));
+ 
   import Form from '../../core/Form';
+
+
   export default {
     props:[
           'url',              
@@ -120,16 +84,7 @@
                   selected:'',
                   pergunta_id:'',
             }), 
-
-            dificuldade: new Form({
-                  muitofacil:'',
-                  facil:'',
-                  medio:'',
-                  dificil:'',
-                  muitodificil:'',
-            }), 
-
-            temp:'',
+ 
              temp_errada:'',
              respondido:'',
              pergunta:'',          
@@ -144,8 +99,8 @@
        pergunta: function (newpergunta_id, oldpergunta_id) {
           this.form.pergunta_id = this.pergunta.id ;
           alertProcessandoHide();
-        }
-
+        },
+ 
     },    
 
 
@@ -203,17 +158,7 @@
         },
 
 
-
-        enviarDificuldade() {
-          
-          this.dificuldade.post( this.url + '/dificuldade')
-            .then(response => {
-              console.log(response); 
-              this.temp = response ;
-              // alert('ok');
-            })            
-            .catch(errors => console.log(errors));
-        },
+ 
 
 
 
@@ -257,7 +202,7 @@
 
 
       created() {
-        this.proximaPergunta()
+        this.proximaPergunta(); 
       },
 
         

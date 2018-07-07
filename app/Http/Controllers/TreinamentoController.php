@@ -71,7 +71,18 @@ class TreinamentoController extends Controller
         try {           
             if( !$model = $this->model->ativo()
                         ->whereNotIn( 'id' , session('perguntas.id' , [] ) )
-                        ->whereIn( 'dificuldade' , session('dificuldade' , [ 'Muito Facil', 'Facil', 'Medio' ,  'Dificil' ,  'Muito Dificil'    ] ) )
+
+                        //->join('assunto', 'assunto.id', '=', 'pergunta.assunto_id')
+
+                        ->whereIn( 'pergunta.dificuldade' , session('dificuldade' , [ 'Muito Facil', 'Facil', 'Medio' ,  'Dificil' ,  'Muito Dificil'    ] ) )
+                        
+                        ->whereHas('assunto', function ($query) {
+                            $query->whereIn('disciplina_id', session('disciplina' , [ 6 ] )  );
+                        })
+
+                      //  ->whereIn( 'assunto.disciplina_id' , [6] ) //session('disciplina' , [ 6 ] ) )
+
+
                         ->with('resposta')->get()->random()    ){       
                 return response()->json(  'pergunta nao encontrada' , 500);             
             } 
@@ -112,11 +123,29 @@ class TreinamentoController extends Controller
         if($request->input('muitodificil')){
              $request->session()->push('dificuldade',  'Muito Dificil' );
         }   
-
-
-        return response()->json( [  'dificuldade' =>  session('dificuldade' , [] )    ]   , 200);
-       
  
+        return response()->json( [  'dificuldade' =>  session('dificuldade' , [] )    ]   , 200);
+        
+    }
+
+
+
+    public function alterarDisciplina(Request $request )
+    {
+
+        $request->session()->forget('disciplina');
+
+        if($request->input('disciplina')){
+
+            $temp = $request->input('disciplina');
+            foreach ($temp as $key  ) {
+                $request->session()->push('disciplina', $key  );
+            }
+             //$request->session()->push('disciplina', $request->input('disciplina') );
+        }   
+ 
+        return response()->json( [  'disciplina' =>  session('disciplina' , [] )    ]   , 200);
+        
     }
 
 
