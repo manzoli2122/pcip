@@ -2,8 +2,8 @@
   <div>
     <section class="content-header">
       <h1>
-        <span id="div-titulo-pagina">Listagem dos Assunto </span>
-        <small style="float: right;">
+        <span>Listagem dos Assunto </span>
+        <small>
           <router-link   to="/create" exact>
             <a class="btn btn-success btn-sm"><i class="fa fa-plus"></i> Cadastrar Assunto </a>
           </router-link>  
@@ -14,8 +14,8 @@
     <section class="content">
       <div class="row">
         <div class="col-xs-12">
-          <div class="box box-success" id="div-box"> 
-            <div class="box-body" style="padding-top: 5px; padding-bottom: 3px;">
+          <div class="box box-success"> 
+            <div class="box-body">
               <table class="table table-bordered table-striped table-hover" id="datatable">
                 <thead> 
                   <tr>
@@ -68,18 +68,6 @@ export default {
         ],
       });
 
-      dataTable.on('draw', function () {
-
-        $('[btn-excluir]').click(function (){
-          excluirRecursoPeloId( $(this).data('id') , "Confirma a Exclusão da Disciplina", url , 
-            function(){
-              dataTable.row( $(this).parents('tr') ).remove().draw('page');
-            }
-            );
-        });
-         
-        
-      });
     }
 
   },
@@ -95,3 +83,17 @@ export default {
 
     
 </script>
+
+
+
+<style scoped>
+
+      small {
+       float: right;
+      }
+
+      .box-body{
+        padding-top: 5px; padding-bottom: 3px;
+      }
+
+</style>
