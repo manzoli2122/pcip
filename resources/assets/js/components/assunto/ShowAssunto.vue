@@ -50,6 +50,7 @@
 
 						</div>
 						<div class="box-footer align-right">
+							<button class="btn btn-danger" v-on:click="excluir"><i class="fa fa-trash"></i> Excluir</button>
 						        <router-link  to="/" exact>
 						            <a class="btn btn-default">  <i class="fa fa-reply"></i> <span>  Voltar </span> </a>
 	 	                        </router-link>        
@@ -107,7 +108,40 @@ export default {
 	 		});
     },
         
+
+    methods: {
+
+    	excluir() {
+    		let vm = this;
+	    	alertConfimacaoSweet('Confirma a Exclusão do Assunto', '',
+		        function() { 
+		            vm.excluirItem();
+		        }
+		    );
+	    	
  
+        },
+
+
+        excluirItem() {
+ 
+		    axios.delete(this.url + '/' + this.$route.params.id )
+		                    .then(response => {
+		                    	toastSucesso('Excluido com Sucesso');
+		                    	this.$router.push('/')
+		                    })
+		                    .catch(error => {
+		                      toastErro('Não foi possivel Excluir');
+		                    }); 
+
+		             
+		},
+
+	}
+
+
+
+
     }
 
 

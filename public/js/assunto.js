@@ -500,6 +500,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
 
 
 
@@ -540,7 +541,28 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         }).catch(function (error) {
             toastErro('Não foi possivel achar as disciplinas');
         });
+    },
+
+
+    methods: {
+        excluir: function excluir() {
+            var vm = this;
+            alertConfimacaoSweet('Confirma a Exclusão do Assunto', '', function () {
+                vm.excluirItem();
+            });
+        },
+        excluirItem: function excluirItem() {
+            var _this2 = this;
+
+            axios.delete(this.url + '/' + this.$route.params.id).then(function (response) {
+                toastSucesso('Excluido com Sucesso');
+                _this2.$router.push('/');
+            }).catch(function (error) {
+                toastErro('Não foi possivel Excluir');
+            });
+        }
     }
+
 });
 
 /***/ }),
@@ -1190,6 +1212,18 @@ var render = function() {
                   "div",
                   { staticClass: "box-footer align-right" },
                   [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-danger",
+                        on: { click: _vm.excluir }
+                      },
+                      [
+                        _c("i", { staticClass: "fa fa-trash" }),
+                        _vm._v(" Excluir")
+                      ]
+                    ),
+                    _vm._v(" "),
                     _c("router-link", { attrs: { to: "/", exact: "" } }, [
                       _c("a", { staticClass: "btn btn-default" }, [
                         _c("i", { staticClass: "fa fa-reply" }),

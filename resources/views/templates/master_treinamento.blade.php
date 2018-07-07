@@ -16,8 +16,18 @@
 
     <title> @yield('content-header') :: {{ config('app.name', 'PCIP') }}</title>
     <link rel="shortcut icon" type="image/x-icon" href="/images/salao-icon.ico">
-    <link href="{{ mix('css/vendor.css') }}" rel="stylesheet" type="text/css"/>
+     
+    <link href="{{ mix('css/bootstrap.css') }}" rel="stylesheet" type="text/css"/>
+
+    <link href="{{ mix('css/fonts.css') }}" rel="stylesheet" type="text/css"/>
+
+    <link href="{{ mix('css/select2.css') }}" rel="stylesheet" type="text/css"/>
+
+    <link href="{{ mix('css/alertas.css') }}" rel="stylesheet" type="text/css"/>
+
+<!-- <link href="/css/vendor.css" rel="stylesheet" type="text/css"/> -->
     <link href="{{ mix('css/template.css') }}" rel="stylesheet" type="text/css"/>
+
    
     <link href="{{ mix('css/app.css') }}" rel="stylesheet" type="text/css"/>
     <!-- Google Font -->
