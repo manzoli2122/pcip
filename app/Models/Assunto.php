@@ -35,7 +35,7 @@ class Assunto extends Model
     public function rules($id = ''){
         return [
             'nome' => 'required|min:3|max:500',
-            'descricao' => 'required|min:3|max:500',                
+            'descricao' => 'required|min:3',                
         ];
     }
 

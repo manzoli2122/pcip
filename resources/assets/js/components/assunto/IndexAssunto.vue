@@ -21,7 +21,7 @@
                   <tr>
                     <th pesquisavel style="max-width:35px">ID</th>
                     <th pesquisavel>Nome</th>
-                    <th>Descricao</th>  
+                     
                     <th pesquisavel>disciplina</th>
                     <th>disciplina</th>
                     <th class="align-center" style="width:140px">Ações</th>
@@ -61,7 +61,7 @@ export default {
         columns: [
         { data: 'id', name: 'id'  },
         { data: 'nome', name: 'nome' },
-        { data: 'descricao', name: 'descricao' }, 
+        
         { data: 'disciplina_id', name: 'disciplina_id' }, 
         { data: 'disciplina.nome', name: 'disciplina.nome' }, 
         { data: 'action', name: 'action', orderable: false, searchable: false, class: 'align-center'}

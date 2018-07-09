@@ -25,6 +25,9 @@ class UsuarioController extends VueController
     public function __construct(User $user){
         $this->model = $user; 
         $this->middleware('auth');
+
+        $this->middleware('permissao:usuarios') ;
+        
     }
 
 

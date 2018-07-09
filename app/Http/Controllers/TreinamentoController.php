@@ -77,7 +77,7 @@ class TreinamentoController extends Controller
                         ->whereIn( 'pergunta.dificuldade' , session('dificuldade' , [ 'Muito Facil', 'Facil', 'Medio' ,  'Dificil' ,  'Muito Dificil'    ] ) )
                         
                         ->whereHas('assunto', function ($query) {
-                            $query->whereIn('disciplina_id', session('disciplina' , [ 6 ] )  );
+                            $query->whereIn('disciplina_id', session('disciplina' , [ 6 , 7 , 8 , 9 , 10 ] )  );
                         })
 
                       //  ->whereIn( 'assunto.disciplina_id' , [6] ) //session('disciplina' , [ 6 ] ) )

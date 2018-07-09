@@ -6,7 +6,7 @@
           <div class="col-xs-12"><h4 class="titulo" v-if="pergunta"><b>DISCIPLINA:</b> {{ pergunta.assunto.disciplina.nome  }}</h4></div>
         </div>
         <div class="box box-success box-solid">
-          <div class="box-header with-border"><h1 class="box-title"><b>Pergunta:</b><span v-html="pergunta.texto"></span></h1></div>  
+          <div class="box-header with-border"><h1 class="box-title"><span v-html="pergunta.texto"></span></h1></div>  
           <form method="post" action="#"  @submit.prevent="onSubmit">   
             <div class="box-body">  
               <div class="row">

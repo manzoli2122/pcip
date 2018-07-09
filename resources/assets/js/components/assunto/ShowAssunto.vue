@@ -10,10 +10,16 @@
 				<div class="col-xs-12">
 					<div class="box box-success">  
 						<div class="box-body">            
-
+							<section  class="row text-center dados">    
+								<div class="col-12 col-sm-12 dado">
+									<h1 style="text-align:center;"> Descrição: </h1>
+								</div>  
+							</section>
 							<section class="row text-center dados">    
 								<div class="col-12 col-sm-12 dado">
-									<h4 style="text-align:left;">Descrição: {{model.descricao}} </h4>
+									<h4 style="text-align:left;">
+										<span v-html="model.descricao"></span><br> 
+									</h4>
 								</div>     
 								<div class="col-12 col-sm-12 dado">
 									<h4 style="text-align:left;"> Data de Criação: {{model.created_at}} </h4>
@@ -33,8 +39,8 @@
 								<div class="col-12 col-sm-12 dado">
 									<h1 style="text-align:center;"> Pergunta {{pergunta.id}}: </h1>
 									<p style="text-align:left;"> 
-										 {{pergunta.texto}} <br>
-											
+										  
+											<span v-html="pergunta.texto"></span><br>
 
 											<span v-for="resposta in pergunta.resposta">
 												( )<span v-html="resposta.texto"></span><br>

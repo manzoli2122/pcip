@@ -23,7 +23,8 @@
                   <div class="col-md-12">
                     <div class="form-group" v-bind:class="{  'has-error': form.errors.has('descricao') }">
                       <label for="descricao"  >Descricao:</label>
-                      <input type="text" id="descricao" name="descricao" class="form-control input" v-model="form.descricao"> 
+                       
+                      <textarea id="descricao" name="descricao" class="form-control input" v-model="form.descricao" style="height:200px"> </textarea>    
                       <span class="help is-danger" v-if="form.errors.has('descricao')" v-text="form.errors.get('descricao')"></span>
                     </div>
                   </div>
