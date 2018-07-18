@@ -126,7 +126,10 @@ export default {
 
                             })
                        )
-                    .catch(errors => console.log(errors));
+                    .catch(errors => {
+                       //toastErro('Aconteceu um erro - ' + errors.status);
+                       console.log(errors)
+                    });
             }
 
         }

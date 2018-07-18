@@ -43,24 +43,24 @@
       
 
         @if(Route::getRoutes()->hasNamedRoute('pergunta.index'))
-          @perfil('Admin')
+           @permissao('perguntas')
             <li>
               <a href="{{ route('pergunta.index')}}">
                 <i class="fa fa-question fa-lg fa-2x text-blue"></i> <span>  pergunta </span>
               </a>
             </li>
-          @endperfil       
+           @endpermissao      
         @endif 
 
         
         @if(Route::getRoutes()->hasNamedRoute('assunto.index'))
-          @perfil('Admin')
+          @permissao('assuntos')
             <li>
               <a href="{{ route('assunto.index')}}">
                 <i class="fa fa-comments fa-lg fa-2x text-orange"></i> <span>  Assunto </span>
               </a>
             </li>
-          @endperfil       
+          @endpermissao      
         @endif 
 
 
@@ -75,18 +75,7 @@
           @endperfil       
         @endif 
 
-
-
-
-
-
-
-
-
-
-
-
-
+ 
 
         @if(Route::getRoutes()->hasNamedRoute('autorizacao')) 
         @permissao('admin-master-power')

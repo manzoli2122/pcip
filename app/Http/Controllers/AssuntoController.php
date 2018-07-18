@@ -33,7 +33,14 @@ class AssuntoController extends VueController
 
     public function __construct(Assunto $assunto){        
         $this->model = $assunto;         
-        $this->middleware('auth');                                 
+        $this->middleware('auth');      
+        
+        $this->middleware('permissao:assuntos') ;  
+
+        $this->middleware('permissao:assuntos_cadastrar')->only('store');  
+
+
+
     }
 
 

@@ -32,7 +32,9 @@ class RespostaController extends VueController
         
         $this->model = $resposta; 
         
-        $this->middleware('auth');     
+        $this->middleware('auth'); 
+
+        $this->middleware('permissao:respostas') ;   
                             
     }
 

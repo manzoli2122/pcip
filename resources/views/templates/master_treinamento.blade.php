@@ -16,7 +16,7 @@
 
     <title> @yield('content-header') :: {{ config('app.name', 'PCIP') }}</title>
     <link rel="shortcut icon" type="image/x-icon" href="/images/salao-icon.ico">
-     
+
     <link href="{{ mix('css/bootstrap.css') }}" rel="stylesheet" type="text/css"/>
 
     <link href="{{ mix('css/fonts.css') }}" rel="stylesheet" type="text/css"/>
@@ -25,10 +25,10 @@
 
     <link href="{{ mix('css/alertas.css') }}" rel="stylesheet" type="text/css"/>
 
-<!-- <link href="/css/vendor.css" rel="stylesheet" type="text/css"/> -->
+    <!-- <link href="/css/vendor.css" rel="stylesheet" type="text/css"/> -->
     <link href="{{ mix('css/template.css') }}" rel="stylesheet" type="text/css"/>
 
-   
+
     <link href="{{ mix('css/app.css') }}" rel="stylesheet" type="text/css"/>
     <!-- Google Font -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
@@ -41,21 +41,21 @@
 
     <!-- Mensagens de Sucesso -->
     @if (\Session::has('success'))
-        <input type="hidden" id="_success" value="{{ \Session::pull('success') }}">
+    <input type="hidden" id="_success" value="{{ \Session::pull('success') }}">
     @endif
 
     <!-- Mensagens de ERRO -->
     @if ($errors->any())
-        @foreach ($errors->all() as $error)
-            <input type="hidden" name="_errors[]" value="{{ $error }}">
-        @endforeach
+    @foreach ($errors->all() as $error)
+    <input type="hidden" name="_errors[]" value="{{ $error }}">
+    @endforeach
     @endif
 
 
 
 
     <div class="wrapper">
-    
+
         @include('templates.header_treinamento')
         
 
@@ -69,6 +69,17 @@
     
     <script src="{{ mix('js/template.js') }}" type="text/javascript"></script>
     <script src="{{ mix('js/app.js') }}" type="text/javascript"></script>
+
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-122498027-1"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+
+      gtag('config', 'UA-122498027-1');
+    </script>
+    
     @stack('script')
 </body>
 

@@ -29,8 +29,7 @@ class DisciplinaController extends VueController
     public function __construct(Disciplina $disciplina){        
         $this->model = $disciplina;         
         $this->middleware('auth');
-
-                                         
+        $this->middleware('permissao:disciplinas')->except('disciplinas') ;                                           
     }
 
 

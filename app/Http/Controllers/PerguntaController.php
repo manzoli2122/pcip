@@ -27,6 +27,16 @@ class PerguntaController extends VueController
     public function __construct(Pergunta $pergunta){        
         $this->model = $pergunta;         
         $this->middleware('auth')->except('respostas');  
+
+        $this->middleware('permissao:perguntas')->except('respostas') ;  
+
+        $this->middleware('permissao:perguntas_cadastrar')->only('store');
+
+        $this->middleware('permissao:perguntas_excluir')->only('destroy');
+
+        $this->middleware('permissao:perguntas_ativar')->only('ativar');
+
+
     }
 
 
